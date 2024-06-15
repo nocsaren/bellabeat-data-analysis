@@ -1,3 +1,10 @@
+--- 
+title: "Untitled" 
+author: "Anonymous" 
+output: html_document 
+---
+
+
 ```{r setup} 
 library(tidyverse)
 
@@ -9,6 +16,7 @@ for (file in function_files) {
 
 
 ```
+
 # Project Information
 
 lorem ipsum
@@ -92,123 +100,49 @@ A clear statement of the business task
 
 ## Prepare 
 
-I have already unzipped the data put the csv files in my ./data folder. Now I will load each of these csv files as data frames to my global environment.
+The data for this task was available at https://www.kaggle.com/datasets/arashnic/fitbit. It consisted of a zip file containing two files:
 
-```{r, load, cache = TRUE}
+Fitabase Data 3.12.16-4.11.16  
+Fitabase Data 4.12.16-5.12.16
+
+For this exercise I will use only Fitabase Data 4.12.16-5.12.16 data set.
+
+There are following 18 files in the zip file:
+
+dailyActivity_merged.csv   
+dailyCalories_merged.csv   
+dailyIntensities_merged.csv  
+dailySteps_merged.csv  
+heartrate_seconds_merged.csv   
+hourlyCalories_merged.csv  
+hourlyIntensities_merged.csv   
+hourlySteps_merged.csv   
+minuteCaloriesNarrow_merged.csv   
+minuteCaloriesWide_merged.csv  
+minuteIntensitiesNarrow_merged.csv   
+minuteIntensitiesWide_merged.csv   
+minuteMETsNarrow_merged.csv  
+minuteSleep_merged.csv   
+minuteStepsNarrow_merged.csv   
+minuteStepsWide_merged.csv   
+sleepDay_merged.csv  
+weightLogInfo_merged.csv   
+
+
+I have already unzipped the data from the zip file put the csv files in my ./data folder. Now I will load each of these csv files as data frames to my global environment using this function i wrote.
+```{r, load}
 dataframes <- load_csv_files("./data")
 ```
 We loaded 18 data frames. Let's have a look at the data:
-```{r, cache = TRUE}
-for (df_name in dataframes) {
-  cat("Dataframe:", df_name, "\n")
-  print(glimpse(get(df_name)))
-  cat("\n")
-}
-
-```
-For each data frame we have varying shapes of observations and variables, which range from 940 to ~2.5M. First thing we see is that the variables related to dates and times have <chr> datatypes.  This indicates the data is stored as text data, and will create problems in comparisons and calculations. I want to convert them to proper date and time datatypes, i.e. POSIXcts.
-The data frames named as daily* have date variables containing only date strings in %m/%d/%Y format and can easily be converted to POSIXct
-``` {r, dates, cache = TRUE}
-dailyActivity_merged$Date <- as.POSIXct(dailyActivity_merged$ActivityDate, 
-                                                format = "%m/%d/%Y", 
-                                                tz = "UTC")
-
-dailyCalories_merged$Date <- as.POSIXct(dailyCalories_merged$ActivityDay, 
-                                               format = "%m/%d/%Y", 
-                                               tz = "UTC")
-
-dailyIntensities_merged$Date <- as.POSIXct(dailyIntensities_merged$ActivityDay, 
-                                                  format = "%m/%d/%Y", 
-                                                  tz = "UTC")
-
-dailySteps_merged$Date <- as.POSIXct(dailySteps_merged$ActivityDay, 
-                                            format = "%m/%d/%Y", 
-                                            tz = "UTC")
-dailyActivity_merged <- subset(dailyActivity_merged, select = -ActivityDate)
-dailyCalories_merged <- subset(dailyCalories_merged, select = -ActivityDay)
-dailyIntensities_merged <- subset(dailyIntensities_merged, select = -ActivityDay)
-dailySteps_merged <- subset(dailySteps_merged, select = -ActivityDay)
-```
-
-Also the datetime values need to be splitted and properly formatted in the other data frames too. That could be time consuming for all those 14 data frames, therefore I wrote a split_datetime_column function to find and format those values. I will use the function iteratively on the data frames that are not daily*. 
-
-
-```{r, datetimes, cache = TRUE}
-
-filtered_dataframes <- dataframes[!grepl("daily", dataframes)]
-for (df_name in filtered_dataframes) {
-  split_datetime_column(df_name)
-  cat(df_name, "done.", "\n")
-}
-
-```
-
-
 ```{r}
 for (df_name in dataframes) {
   cat("Dataframe:", df_name, "\n")
-  print(head(get(df_name),5))
+  str(get(df_name), give.attr = FALSE)
   cat("\n")
 }
-```
-```{r, cache = TRUE}
-for (df_name in dataframes) {
-  df <- get(df_name)  
-  num_duplicates <- sum(duplicated(df)) 
-  cat(df_name, "has", num_duplicates, "duplicates.", "\n") 
-}
-
-for (df_name in dataframes) {
-  df <- get(df_name) 
-  if ("Id" %in% colnames(df)) {
-    cat(df_name, "has 'Id'.\n")
-  } else {
-    cat(df_name, "has not 'Id'.\n")
-  }
-}
-for (df_name in dataframes) {
-  cat(df_name, "has", sapply(df_name, function(x) sum(is.na(x))), "nas", "\n")
-}
-```
-
-
-```{r, join, cache = TRUE}
-bellabeat_joined_all <- full_join(dailyActivity_merged, sleepDay_merged, by = c("Id", "Date"))
-
-bellabeat_joined_no_nas <- inner_join(dailyActivity_merged, sleepDay_merged, by = c("Id", "Date"))
-
-bellabeat_joined_only_nas <- anti_join(bellabeat_joined_all, bellabeat_joined_no_nas, by = c("Id", "Date"))
-
-sapply(bellabeat_joined_no_nas, function(x) sum(is.na(x)))
 
 ```
-``` {r, hourly}
-hourly_dataframes <- dataframes[grepl("hourly", dataframes)]
 
-dailyActivity_merged <- subset(dailyActivity_merged, select = -ActivityDate)
-hourly_merged <- full_join(hourlyCalories_merged, hourlyIntensities_merged)
-hourly_merged <- full_join(hourly_merged, hourlySteps_merged)
-
-```
-``` {r, weight}
-weightLogInfo <- weightLogInfo_merged %>%
-  select(Id, WeightKg) %>% group_by(Id) %>% summarise(mean_weight = mean(WeightKg))
-```
-
-
-Sršen encourages you to use public data that explores smart device users’ daily habits. She points you to a specific data set:
-
-- FitBit Fitness Tracker Data (CC0: Public Domain, dataset made available through Mobius): This Kaggle data set contains personal fitness tracker from thirty fitbit users. Thirty eligible Fitbit users consented to the submission of personal tracker data, including minute-level output for physical activity, heart rate, and sleep monitoring. It includes information about daily activity, steps, and heart rate that can be used to explore users’ habits.
-
-Sršen tells you that this data set might have some limitations, and encourages you to consider adding another data to help address those limitations as you begin to work more with this data.
-
-Case Study Roadmap - Prepare
-
-Guiding questions
-
-* Where is your data stored?
-
-https://www.kaggle.com/datasets/arashnic/fitbit
 
 * How is the data organized? Is it in long or wide format?
 
@@ -246,6 +180,150 @@ Deliverable
 A description of all data sources used
 
 ## Process
+
+First of all, dailyActivity_merged dataframe is the merge of dailyCalories_merged, dailyIntensities_merged, and dailySteps_merged dataframes. I wont need those seperate dataframes, therefore I will drop those three:
+```{r, daily, cache=TRUE}
+
+rm(dailyCalories_merged, dailyIntensities_merged, dailySteps_merged)
+names_to_remove <- c("dailyCalories_merged", "dailyIntensities_merged", "dailySteps_merged")
+dataframes <- setdiff(dataframes, names_to_remove)
+```
+
+
+```{r, wides, cache=TRUE}
+names_to_remove <- dataframes[grep("Wide", dataframes)]
+names_to_remove <- c(names_to_remove, "minuteSleep_merged")
+dataframes <- setdiff(dataframes, names_to_remove)
+rm(list = grep("Wide", ls(), value = TRUE), envir = .GlobalEnv)
+```
+
+I will check for NA values in my dataframes:
+
+```{r, na check, cache=TRUE}
+for (df_name in dataframes) {
+  cat( df_name, "dataframe", "has", sapply(df_name, function(x) sum(is.na(x))), "NAs.", "\n")
+}
+
+```
+
+There are no NA's in our dataframes. 
+
+Now I want to check for duplicates: 
+
+```{r, detect duplicates}
+for (df_name in dataframes) {
+  df <- get(df_name)  
+  num_duplicates <- sum(duplicated(df)) 
+  cat(df_name, "has", num_duplicates, "duplicates.", "\n") 
+}
+
+```
+
+minuteSleep_merged has 543, and sleepDay_merged has 3 duplicates. I want to remove them and recheck.
+
+```{r, remove duplicates, cache=TRUE}
+dataframes_with_duplicates <- c("minuteSleep_merged", "sleepDay_merged")
+minuteSleep_merged <- minuteSleep_merged[!duplicated(minuteSleep_merged), ]
+sleepDay_merged <- sleepDay_merged[!duplicated(sleepDay_merged), ]
+
+
+for (df_name in dataframes_with_duplicates) {
+  df <- get(df_name)  
+  num_duplicates <- sum(duplicated(df)) 
+  cat(df_name, "has", num_duplicates, "duplicates.", "\n") 
+}
+
+```
+For each data frame we have varying shapes of observations and variables, which range from 940 to ~2.5M. First thing we see is that the variables related to dates and times have <chr> datatypes.  This indicates the data is stored as text data, and will create problems in comparisons and calculations. I want to convert them to proper date and time datatypes, i.e. POSIXcts.
+dailyActivity_merged data frame has a date variable containing only date strings in %m/%d/%Y format and can easily be converted to POSIXct:
+``` {r, dates}
+dailyActivity_merged$Date <- as.POSIXct(dailyActivity_merged$ActivityDate, 
+                                                format = "%m/%d/%Y", 
+                                                tz = "UTC")
+
+dailyActivity_merged <- subset(dailyActivity_merged, select = -ActivityDate)
+
+```
+
+Also the datetime values need to be splitted and properly formatted in the other data frames too. That could be time consuming for all those 14 data frames, therefore I wrote a split_datetime_column function to find and format those values. I will use the function iteratively on the data frames that are not dailyActivity_merged, splitting dates and times, and then splits the time values Hour, Minute, and Second variables. 
+
+
+```{r, datetimes}
+
+filtered_dataframes <- dataframes[!grepl("daily", dataframes)]
+for (df_name in filtered_dataframes) {
+  cat(df_name, "... ")
+  split_datetime_column(df_name)
+  cat("done.", "\n")
+}
+
+```
+heartrate_seconds_merged dataframe has a seconds variable, but I have nothing in other data frames that can be compared with that. I will get the mean heart rates for each minute using the values of seconds. 
+
+```{r, heartrate_seconds_merged, cache=TRUE}
+heartrate_seconds_merged <- heartrate_seconds_merged %>% group_by(Id, Date, Hour, Minute) %>% summarise(mean_HR = mean(Value))
+```
+In weightLogInfo_merged we only have LogId variable to differentiate the information and we do not have to relate it with time or anything else, therefore I will group the data by Ids and have a mean weight for each person.
+
+``` {r, weight}
+weightLogInfo_merged <- weightLogInfo_merged %>%
+  select(Id, WeightKg, BMI) %>% group_by(Id) %>% summarise(mean_weight = mean(WeightKg), mean_BMI = mean(BMI))
+```
+
+
+Let's have a quick look to updated dataframes:
+
+```{r}
+for (df_name in dataframes) {
+  cat("Dataframe:", df_name, "\n")
+  print(head(get(df_name),5))
+  cat("\n")
+}
+```
+
+I am planning to merge hourly and minutely data frames to work more efficiently, but before that I want to check if each data frame share an Id variable.
+
+```{r, merge check, cache=TRUE}
+for (df_name in dataframes) {
+  df <- get(df_name) 
+  if ("Id" %in% colnames(df)) {
+    cat(df_name, "Id variable found.\n")
+  } else {
+    cat(df_name, "has no Id variable.\n")
+  }
+}
+
+```
+Now I will create a hourly_merged dataframe by joining all the hourly* dataframes.
+
+``` {r, hourly}
+names_to_remove <- dataframes[grep("hourly", dataframes)]
+lapply(names_to_remove, drop_second_column)
+dataframes <- setdiff(dataframes, names_to_remove)
+hourly_merged <- full_join(hourlyCalories_merged, hourlyIntensities_merged)
+hourly_merged <- full_join(hourly_merged, hourlySteps_merged)
+dataframes <- c(dataframes, "hourly_merged")
+rm(list = grep("^hourly(?!_)", ls(), perl = TRUE, value = TRUE), envir = .GlobalEnv)
+```
+
+I will do the same for minute* dataframes.
+
+``` {r, minutely}
+names_to_remove <- dataframes[grep("minute", dataframes)]
+lapply(names_to_remove, drop_second_column)
+dataframes <- setdiff(dataframes, names_to_remove)
+minutely_merged <- inner_join(minuteCaloriesNarrow_merged, minuteIntensitiesNarrow_merged)
+minutely_merged <- inner_join(minutely_merged, minuteMETsNarrow_merged)
+minutely_merged <- inner_join(minutely_merged, minuteStepsNarrow_merged)
+
+dataframes <- c(dataframes, "minutely_merged")
+rm(list = ls()[grepl("^minute(?!ly)", ls(), perl = TRUE)], envir = .GlobalEnv)
+
+```
+```{r, nas after joins}
+sapply(hourly_merged, function(x) sum(is.na(x)))
+sapply(minutely_merged, function(x) sum(is.na(x)))
+```
 
 Then, process your data for analysis using the following Case Study Roadmap as a guide:
 

@@ -31,7 +31,7 @@ split_datetime_column <- function(df_name) {
   
   # Ensure a datetime column was found
   if (is.null(datetime_col)) {
-    stop("No column with datetime format found in dataframe", df_name)
+    stop("No column with datetime format found in dataframe ", df_name)
   }
   
   # Convert the datetime string to a POSIXct object
@@ -39,7 +39,9 @@ split_datetime_column <- function(df_name) {
   
   # Create separate date and time columns
   df$Date <- as.Date(df[[datetime_col]])
-  df$Time <- format(df[[datetime_col]], "%H:%M:%S")
+  df$Hour <- as.numeric(format(df[[datetime_col]], "%H"))
+  df$Minute <- as.numeric(format(df[[datetime_col]], "%M"))
+  df$Second <- as.numeric(format(df[[datetime_col]], "%S"))
   
   # Remove the original datetime column
   df <- df %>% select(-all_of(datetime_col))
@@ -53,4 +55,3 @@ split_datetime_column <- function(df_name) {
 
 # Example usage
 # Assuming the dataframe 'example' has a column with the format "4/12/2016 12:00:00 AM"
-# modified_df <- split_datetime_column("example")
