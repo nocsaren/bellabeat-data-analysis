@@ -5,8 +5,14 @@ output: html_document
 ---
 
 
-```{r setup} 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = FALSE
+)
 library(tidyverse)
+library(skimr)
 
 function_files <- list.files("./functions", full.names = TRUE)
 
@@ -17,172 +23,108 @@ for (file in function_files) {
 
 ```
 
-# Project Information
-
-lorem ipsum
-
-<details>
-
-<summary>***About the Scenario***</summary>
-
-## Introduction
-
-Welcome to the Bellabeat data analysis case study! In this case study, you will perform many real-world tasks of a junior data analyst. You will imagine you are working for Bellabeat, a high-tech manufacturer of health-focused products for women, and meet different characters and team members. In order to answer the key business questions, you will follow the steps of the data analysis process: ask, prepare, process, analyze, share, and act. Along the way, the Case Study Roadmap tables — including guiding questions and key tasks — will help you stay on the right path. 
-
-By the end of this lesson, you will have a portfolio-ready case study. Download the packet and reference the details of this case study anytime. Then, when you begin your job hunt, your case study will be a tangible way to demonstrate your knowledge and skills to potential employers.
-
-## Scenario
-
-You are a junior data analyst working on the marketing analyst team at Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global smart device market. Urška Sršen, cofounder and Chief Creative Offcer of Bellabeat, believes that analyzing smart device fitness data could help unlock new growth opportunities for the company. You have been asked to focus on one of Bellabeat’s products and analyze smart device data to gain insight into how consumers are using their smart devices. The insights you discover will then help guide marketing strategy for the company. You will present your analysis to the Bellabeat executive team along with your high-level recommendations for Bellabeat’s marketing strategy.
-
-## Characters and products
-
-**_Characters_**
-
-*Urška Sršen:* Bellabeat’s cofounder and Chief Creative Officer
-
-*Sando Mur:* Mathematician and Bellabeat’s cofounder; key member of the Bellabeat executive team
-
-*Bellabeat marketing analytics team:* A team of data analysts responsible for collecting, analyzing, and reporting data that helps guide Bellabeat’s marketing strategy. You joined this team six months ago and have been busy learning about Bellabeat’’s mission and business goals — as well as how you, as a junior data analyst, can help Bellabeat achieve them.
-
-**_Products_**
-
-*Bellabeat app:* The Bellabeat app provides users with health data related to their activity, sleep, stress, menstrual cycle, and mindfulness habits. This data can help users better understand their current habits and make healthy decisions. The Bellabeat app connects to their line of smart wellness products.
-
-*Leaf:* Bellabeat’s classic wellness tracker can be worn as a bracelet, necklace, or clip. The Leaf tracker connects to the Bellabeat app to track activity, sleep, and stress.
-
-*Time:* This wellness watch combines the timeless look of a classic timepiece with smart technology to track user activity, sleep, and stress. The Time watch connects to the Bellabeat app to provide you with insights into your daily wellness.
-
-*Spring:* This is a water bottle that tracks daily water intake using smart technology to ensure that you are appropriately hydrated throughout the day. The Spring bottle connects to the Bellabeat app to track your hydration levels.
-
-*Bellabeat membership:* Bellabeat also offers a subscription-based membership program for users. Membership gives users 24/7 access to fully personalized guidance on nutrition, activity, sleep, health and beauty, and mindfulness based on their lifestyle and goals.
-
-## About The Company
-Urška Sršen and Sando Mur founded Bellabeat, a high-tech company that manufactures health-focused smart products. Sršen used her background as an anaist to develop beautifully designed technology that informs and inspires women around the world. Collecting data on activity, sleep, stress, and reproductive health has allowed Bellabeat to empower women with knowledge about their own health and habits. Since it was founded in 2013, Bellabeat has grown rapidly and quickly positioned itself as a tech-driven wellness company for women. 
-
-By 2016, Bellabeat had opened offices around the world and launched multiple products. Bellabeat products became available through a growing number of online retailers in addition to their own e-commerce channel on their website. The company has invested in traditional advertising media, such as radio, out-of-home billboards, print, and television, but focuses on digital marketing extensively. Bellabeat invests year-round in Google Search, maintaining active Facebook and Instagram pages, and consistently engages consumers on Twitter. Additionally, Bellabeat runs video ads on Youtube and display ads on the Google Display Network to support campaigns around key marketing dates.
-
-Sršen knows that an analysis of Bellabeat’s available consumer data would reveal more opportunities for growth. She has asked the marketing analytics team to focus on a Bellabeat product and analyze smart device usage data in order to gain insight into how people are already using their smart devices. Then, using this information, she would like high-level recommendations for how these trends can inform Bellabeat marketing strategy.
-
-</details>
+# Business Task  
+The primary objective of this analysis is to explore the relationship between Bellabeat users and their usage of Bellabeat products. We aim to define user groups based on their habits and create usage scenarios for each group. By addressing the following questions, we will gain insights to inform Bellabeat’s marketing strategy and product development:  
+1.	Are there distinct user groups based on product usage?  
+2.	How do these user groups differ in their usage of the product?  
+3.	How can this analysis benefit these user groups by profiling their needs?  
+4.	Are there patterns in product usage, and what are the usage habits of each group?  
+5.	Can we identify patterns in the data that can be leveraged to maximize benefits for all users?  
+The task is to analyze the usage data from Bellabeat’s smart devices and app to identify distinct user groups and their respective usage patterns. Understanding these groups and their behaviors will enable Bellabeat to tailor its marketing strategies to better meet user needs, enhance user satisfaction, and drive growth. This analysis involves segmenting users based on their habits, identifying usage scenarios, and leveraging data patterns to provide actionable recommendations for maximizing user benefits.
 
 
-## Ask
+# Data Sources  
 
-Sršen asks you to analyze smart device usage data in order to gain insight into how consumers use non-Bellabeat smart devices. She then wants you to select one Bellabeat product to apply these insights to in your presentation. These questions will guide your analysis:
+The data for this analysis was sourced from Kaggle and is available at Kaggle - Fitbit Dataset. It consists of a zip file containing two datasets:  
+1.	Fitabase Data 3.12.16-4.11.16  
+2.	Fitabase Data 4.12.16-5.12.16  
+For this exercise, we will use the Fitabase Data 4.12.16-5.12.16 dataset.  
 
-1. What are some trends in smart device usage?
-2. How could these trends apply to Bellabeat customers?
-3. How could these trends help influence Bellabeat marketing strategy?
+## Data Files  
+The dataset contains the following 18 CSV files:  
+•	dailyActivity_merged.csv  
+•	dailyCalories_merged.csv  
+•	dailyIntensities_merged.csv  
+•	dailySteps_merged.csv  
+•	heartrate_seconds_merged.csv  
+•	hourlyCalories_merged.csv  
+•	hourlyIntensities_merged.csv  
+•	hourlySteps_merged.csv  
+•	minuteCaloriesNarrow_merged.csv  
+•	minuteCaloriesWide_merged.csv  
+•	minuteIntensitiesNarrow_merged.csv  
+•	minuteIntensitiesWide_merged.csv  
+•	minuteMETsNarrow_merged.csv  
+•	minuteSleep_merged.csv  
+•	minuteStepsNarrow_merged.csv  
+•	minuteStepsWide_merged.csv  
+•	sleepDay_merged.csv  
+•	weightLogInfo_merged.csv  
 
-You will produce a report with the following deliverables:
+## Data Loading  
+The data has been unzipped and placed in the ./data folder. Each of these CSV files was loaded into the global environment as data frames using a custom load_csv_files function.
 
-1. A clear summary of the business task
-2. A description of all data sources used
-3. Documentation of any cleaning or manipulation of data
-4. A summary of your analysis
-5. Supporting visualizations and key findings
-6. Your top high-level content recommendations based on your analysis
-
-Guiding questions
-
-* What is the problem you are trying to solve?
-* How can your insights drive business decisions?
-
-Key tasks
-
-1. Identify the business task
-2. Consider key stakeholders
-
-Deliverable
-
-A clear statement of the business task
-
-## Prepare 
-
-The data for this task was available at https://www.kaggle.com/datasets/arashnic/fitbit. It consisted of a zip file containing two files:
-
-Fitabase Data 3.12.16-4.11.16  
-Fitabase Data 4.12.16-5.12.16
-
-For this exercise I will use only Fitabase Data 4.12.16-5.12.16 data set.
-
-There are following 18 files in the zip file:
-
-dailyActivity_merged.csv   
-dailyCalories_merged.csv   
-dailyIntensities_merged.csv  
-dailySteps_merged.csv  
-heartrate_seconds_merged.csv   
-hourlyCalories_merged.csv  
-hourlyIntensities_merged.csv   
-hourlySteps_merged.csv   
-minuteCaloriesNarrow_merged.csv   
-minuteCaloriesWide_merged.csv  
-minuteIntensitiesNarrow_merged.csv   
-minuteIntensitiesWide_merged.csv   
-minuteMETsNarrow_merged.csv  
-minuteSleep_merged.csv   
-minuteStepsNarrow_merged.csv   
-minuteStepsWide_merged.csv   
-sleepDay_merged.csv  
-weightLogInfo_merged.csv   
-
-
-I have already unzipped the data from the zip file put the csv files in my ./data folder. Now I will load each of these csv files as data frames to my global environment using this function i wrote.
-```{r, load}
+```{r, Load Dataframes, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 dataframes <- load_csv_files("./data")
 ```
-We loaded 18 data frames. Let's have a look at the data:
-```{r}
+
+## Data Overview  
+Using the skim function, a preliminary overview of the data was obtained. The dataset consists of 18 CSV files that can be categorized as follows:
+
+```{r, Skim, eval=FALSE, include=FALSE}
 for (df_name in dataframes) {
   cat("Dataframe:", df_name, "\n")
-  str(get(df_name), give.attr = FALSE)
+  print(skim(get(df_name)))
   cat("\n")
 }
 
 ```
 
 
-* How is the data organized? Is it in long or wide format?
+•	Daily Data:  
+o	dailyActivity_merged  
+o	dailyCalories_merged  
+o	dailyIntensities_merged  
+o	dailySteps_merged  
+•	Hourly Data:  
+o	hourlyCalories_merged  
+o	hourlyIntensities_merged  
+o	hourlySteps_merged  
+•	Minutely Data:  
+o	minuteCaloriesNarrow_merged  
+o	minuteCaloriesWide_merged  
+o	minuteIntensitiesNarrow_merged  
+o	minuteIntensitiesWide_merged  
+o	minuteMETsNarrow_merged  
+o	minuteSleep_merged  
+o	minuteStepsNarrow_merged  
+o	minuteStepsWide_merged  
+•	Other Data:  
+o	heartrate_seconds_merged  
+o	sleepDay_merged  
+o	weightLogInfo_merged   
 
-the data consist of 18 csv files, can be grouped as daily, hourly, and minutely, also has sleep, heart rate and weight log data.
+## Data Merging  
+•	Daily Data:  
+o	dailyActivity_merged is already a merge of dailyCalories_merged, dailyIntensities_merged, and dailySteps_merged.  
+o	sleepDay_merged can be joined with dailyActivity_merged as both contain daily records.  
+•	Hourly Data:  
+o	Hourly data files can be merged to create hourlyActivity_merged.  
+•	Minutely Data:  
+o	Minutely data files can be merged to create minuteActivity_merged.  
+The merged datasets will provide a comprehensive view of user activity at different time intervals, enabling a detailed analysis of user habits and usage patterns.  
 
-dailyActivity_merged is a merge of dailyCalories_merged, dailyIntensities_merged, and dailySteps_merged. 
+## Data Cleaning and Manipulation  
+Before proceeding with the analysis, the following steps will be taken to clean and manipulate the data:  
+1.	Handling Missing Values: Missing values will be identified and appropriately handled (e.g., imputation, removal).  
+2.	Removing Duplicates: Duplicate records will be removed to ensure data integrity.  
+3.	Data Type Conversion: Ensure all columns have the correct data types (e.g., datetime for date columns).  
+4.	Merging Data: Merge the datasets as described to create comprehensive daily, hourly, and minutely datasets.  
 
-hourly and minutely data can also be merged by joining and assigning to dataframes hourlyActivity_merged and minuteActivity_merged respectively. 
+## Data Preparation Steps  
+1.	Drop Unnecessary DataFrames: Since dailyActivity_merged is already a combination of dailyCalories_merged, dailyIntensities_merged, and dailySteps_merged, these separate dataframes are not needed and were dropped from the environment.   
 
-sleepDay_merged may be considered joining with dailyActivity_merged as both are dailies.
-
-* Are there issues with bias or credibility in this data? Does your data ROCCC?
-
-
-
-- How are you addressing licensing, privacy, security, and accessibility?
-
-
-- How did you verify the data’s integrity?
-
-
-- How does it help you answer your question?
-
-
-- Are there any problems with the data?
-
-Key tasks
-
-1. Download data and store it appropriately.
-2. Identify how it’s organized.
-3. Sort and alter the data.
-4. Determine the credibility of the data.
-
-Deliverable
-A description of all data sources used
-
-## Process
-
-First of all, dailyActivity_merged dataframe is the merge of dailyCalories_merged, dailyIntensities_merged, and dailySteps_merged dataframes. I wont need those seperate dataframes, therefore I will drop those three:
-```{r, daily, cache=TRUE}
+```{r, Remove Daily, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 
 rm(dailyCalories_merged, dailyIntensities_merged, dailySteps_merged)
 names_to_remove <- c("dailyCalories_merged", "dailyIntensities_merged", "dailySteps_merged")
@@ -190,38 +132,34 @@ dataframes <- setdiff(dataframes, names_to_remove)
 ```
 
 
-```{r, wides, cache=TRUE}
+```{r, Remove Wide, include=FALSE}
 names_to_remove <- dataframes[grep("Wide", dataframes)]
 names_to_remove <- c(names_to_remove, "minuteSleep_merged")
 dataframes <- setdiff(dataframes, names_to_remove)
 rm(list = grep("Wide", ls(), value = TRUE), envir = .GlobalEnv)
 ```
-
-I will check for NA values in my dataframes:
-
-```{r, na check, cache=TRUE}
+2. Check for Missing Values:  
+```{r, NA Check, echo=TRUE, message=TRUE, warning=TRUE}
 for (df_name in dataframes) {
   cat( df_name, "dataframe", "has", sapply(df_name, function(x) sum(is.na(x))), "NAs.", "\n")
 }
 
 ```
-
-There are no NA's in our dataframes. 
-
-Now I want to check for duplicates: 
-
-```{r, detect duplicates}
+All data frames were checked for missing values. No missing values were found in any of the data frames.   
+3. Remove Duplicates:  
+```{r, Duplicate Check, echo=TRUE, message=TRUE, warning=TRUE}
 for (df_name in dataframes) {
   df <- get(df_name)  
   num_duplicates <- sum(duplicated(df)) 
   cat(df_name, "has", num_duplicates, "duplicates.", "\n") 
 }
-
 ```
 
-minuteSleep_merged has 543, and sleepDay_merged has 3 duplicates. I want to remove them and recheck.
+•	minuteSleep_merged had 543 duplicates.
+•	sleepDay_merged had 3 duplicates.
 
-```{r, remove duplicates, cache=TRUE}
+Duplicates were removed and the data was rechecked to confirm there were no remaining duplicates.
+```{r, Remove Duplicate, echo=TRUE, message=TRUE, warning=TRUE}
 dataframes_with_duplicates <- c("minuteSleep_merged", "sleepDay_merged")
 minuteSleep_merged <- minuteSleep_merged[!duplicated(minuteSleep_merged), ]
 sleepDay_merged <- sleepDay_merged[!duplicated(sleepDay_merged), ]
@@ -232,11 +170,16 @@ for (df_name in dataframes_with_duplicates) {
   num_duplicates <- sum(duplicated(df)) 
   cat(df_name, "has", num_duplicates, "duplicates.", "\n") 
 }
-
 ```
-For each data frame we have varying shapes of observations and variables, which range from 940 to ~2.5M. First thing we see is that the variables related to dates and times have <chr> datatypes.  This indicates the data is stored as text data, and will create problems in comparisons and calculations. I want to convert them to proper date and time datatypes, i.e. POSIXcts.
-dailyActivity_merged data frame has a date variable containing only date strings in %m/%d/%Y format and can easily be converted to POSIXct:
-``` {r, dates}
+4. Data Shape and Types: 
+
+Each data frame was inspected for the number of observations and variables. The observations range from 940 to approximately 2.5 million. It was noted that the variables related to dates and times are stored as text data (<chr> data type), which can cause issues in comparisons and calculations.
+
+
+a. Convert Date and Time Columns to Proper Data Types:   
+Date and time columns were converted to appropriate datetime formats (POSIXct). This ensures proper handling and manipulation of date and time data.
+
+```{r, Daily Posixct, include=FALSE}
 dailyActivity_merged$Date <- as.POSIXct(dailyActivity_merged$ActivityDate, 
                                                 format = "%m/%d/%Y", 
                                                 tz = "UTC")
@@ -245,10 +188,11 @@ dailyActivity_merged <- subset(dailyActivity_merged, select = -ActivityDate)
 
 ```
 
-Also the datetime values need to be splitted and properly formatted in the other data frames too. That could be time consuming for all those 14 data frames, therefore I wrote a split_datetime_column function to find and format those values. I will use the function iteratively on the data frames that are not dailyActivity_merged, splitting dates and times, and then splits the time values Hour, Minute, and Second variables. 
+b. Splitting Date and Time Columns:  
+The datetime values need to be split and properly formatted in the other data frames as well. Given the number of data frames (14), this could be a time-consuming process. To streamline this, a split_datetime_column function was created to find and format these values efficiently. This function will be used iteratively on the data frames that are not dailyActivity_merged, splitting dates and times and then splitting the time values into Hour, Minute, and Second variables.
 
 
-```{r, datetimes}
+```{r, Split Datetime, include=FALSE}
 
 filtered_dataframes <- dataframes[!grepl("daily", dataframes)]
 for (df_name in filtered_dataframes) {
@@ -258,45 +202,27 @@ for (df_name in filtered_dataframes) {
 }
 
 ```
-heartrate_seconds_merged dataframe has a seconds variable, but I have nothing in other data frames that can be compared with that. I will get the mean heart rates for each minute using the values of seconds. 
+### Handling Specific Data Frames
+1. heartrate_seconds_merged  
+The heartrate_seconds_merged dataframe has a seconds variable, which isn't directly comparable with other data frames. To make it useful, the mean heart rates for each minute will be calculated.
 
-```{r, heartrate_seconds_merged, cache=TRUE}
-heartrate_seconds_merged <- heartrate_seconds_merged %>% group_by(Id, Date, Hour, Minute) %>% summarise(mean_HR = mean(Value))
+
+```{r, Heartrate, message=FALSE, warning=FALSE, include=FALSE}
+heartrate_seconds_merged <- heartrate_seconds_merged %>% group_by(Id, Date, Hour, Minute) %>% summarise(mean_HR = mean(Value)) %>% group_by(Id, Date, Hour) %>% summarise(mean_HR = mean(mean_HR))
 ```
-In weightLogInfo_merged we only have LogId variable to differentiate the information and we do not have to relate it with time or anything else, therefore I will group the data by Ids and have a mean weight for each person.
+2. weightLogInfo_merged  
+In the weightLogInfo_merged dataframe, only the LogId variable differentiates the information, and there is no way to relate it with time. Therefore, the data will be grouped by Id to obtain a mean weight for each person.
 
-``` {r, weight}
+
+```{r, Weight, include=FALSE}
 weightLogInfo_merged <- weightLogInfo_merged %>%
   select(Id, WeightKg, BMI) %>% group_by(Id) %>% summarise(mean_weight = mean(WeightKg), mean_BMI = mean(BMI))
 ```
+### Creating Merged DataFrames  
+1. Hourly Data  
+The hourly_merged dataframe will be created by joining all the hourly* dataframes.
 
-
-Let's have a quick look to updated dataframes:
-
-```{r}
-for (df_name in dataframes) {
-  cat("Dataframe:", df_name, "\n")
-  print(head(get(df_name),5))
-  cat("\n")
-}
-```
-
-I am planning to merge hourly and minutely data frames to work more efficiently, but before that I want to check if each data frame share an Id variable.
-
-```{r, merge check, cache=TRUE}
-for (df_name in dataframes) {
-  df <- get(df_name) 
-  if ("Id" %in% colnames(df)) {
-    cat(df_name, "Id variable found.\n")
-  } else {
-    cat(df_name, "has no Id variable.\n")
-  }
-}
-
-```
-Now I will create a hourly_merged dataframe by joining all the hourly* dataframes.
-
-``` {r, hourly}
+```{r, Hourly merged, include=FALSE}
 names_to_remove <- dataframes[grep("hourly", dataframes)]
 lapply(names_to_remove, drop_second_column)
 dataframes <- setdiff(dataframes, names_to_remove)
@@ -304,11 +230,14 @@ hourly_merged <- full_join(hourlyCalories_merged, hourlyIntensities_merged)
 hourly_merged <- full_join(hourly_merged, hourlySteps_merged)
 dataframes <- c(dataframes, "hourly_merged")
 rm(list = grep("^hourly(?!_)", ls(), perl = TRUE, value = TRUE), envir = .GlobalEnv)
+hourly_merged <- hourly_merged %>% select(-Minute)
 ```
 
-I will do the same for minute* dataframes.
+2. Minutely Data  
+Similarly, the minute_merged dataframe will be created by joining all the minute* dataframes.
 
-``` {r, minutely}
+
+```{r, Minutely merged, include=FALSE}
 names_to_remove <- dataframes[grep("minute", dataframes)]
 lapply(names_to_remove, drop_second_column)
 dataframes <- setdiff(dataframes, names_to_remove)
@@ -320,65 +249,95 @@ dataframes <- c(dataframes, "minutely_merged")
 rm(list = ls()[grepl("^minute(?!ly)", ls(), perl = TRUE)], envir = .GlobalEnv)
 
 ```
-```{r, nas after joins}
-sapply(hourly_merged, function(x) sum(is.na(x)))
-sapply(minutely_merged, function(x) sum(is.na(x)))
+### Removing Unnecessary Columns  
+After splitting the datetime columns, it was found that the Hour, Minute, and Second variables in the sleepDay_merged dataframe all contained 0, 0, 0 data. Therefore, these columns were removed to clean up the dataframe.
+
+```{r, Sleep Merged, include=FALSE}
+sleepDay_merged <- sleepDay_merged %>% select(-Hour, -Minute, -Second)
+```
+## Analyze
+
+I had 5 questions to the data, which were  
+
+1. Are there user groups which can be said to differ in the usage of the product?
+2. In what respect those user groups differ?
+3. How can this user grouping benefit this analysis, therefore profiling the needs of various user groups?
+4. Are there any patterns in the usage of the product? What are the usage habits of user groups?
+5. Are there any patterns in the data which can be leveraged to maximize the benefit for all users?
+
+
+The variables I can use to group users can be;
+
+* Time variables, like the time of the day, or the day of the week  
+* Activity per day  
+* Distance per day  
+* Steps per day  
+* Calories per day  
+* Mean Heart Rate  
+* Intensity per day  
+* Sleep duration per day  
+* Weight  
+To address these questions, we will perform feature engineering and create new variables that can be used to group users. These variables include time-related variables, activity levels, distance, steps, calories, heart rate, intensity, sleep duration, and weight.
+To analyze user behavior based on the day of the week, I created a weekdays data frame that maps dates to weekday names. This data frame was then joined with all other data frames containing date information to add the weekday information to each record. I also created a function to group hours of the day into categorical times: Morning, Afternoon, Evening, and Night. This function was applied to all data frames that contain hour data.
+
+```{r, Weekdays Joins, include=FALSE}
+rm(weekdays)
+weekdays <- read_csv("./data/weekdays.csv", col_names = c("Date", "Day"), show_col_types = FALSE)
+
+weekdays$Date <- as.POSIXct(weekdays$Date, 
+                            format = "%d/%m/%Y",
+                            tz = "UTC")
+
+daily_activity <- inner_join(dailyActivity_merged, weekdays)
+heartrate <- inner_join(heartrate_seconds_merged, weekdays)
+hourly <- inner_join(hourly_merged, weekdays)
+sleepday <- inner_join(sleepDay_merged, weekdays)
+weight <- weightLogInfo_merged
+names_to_remove <- c("dailyActivity_merged", "df", "heartrate_seconds_merged", "hourly_merged", "minutely_merged", "sleepDay_merged", "weightLogInfo_merged")
+rm(list = (names_to_remove))
+
+loaded_dataframes <- ls(envir = .GlobalEnv)[sapply(ls(envir = .GlobalEnv), function(x) inherits(get(x, envir = .GlobalEnv), "data.frame"))]
+for (df_name in loaded_dataframes) {
+  if ("Hour" %in% colnames(get(df_name, envir = .GlobalEnv))) {
+    updated_df <- time_of_day(get(df_name, envir = .GlobalEnv))
+    assign(df_name, updated_df, envir = .GlobalEnv)
+  }
+}
+rm(updated_df)
 ```
 
-Then, process your data for analysis using the following Case Study Roadmap as a guide:
+From the dailyActivity_merged dataframe, I created a TotalMinutes variable as the sum of the minutes of different types of activities (e.g., SedentaryMinutes, LightlyActiveMinutes, FairlyActiveMinutes, and VeryActiveMinutes). Additionally, I created per-day variables for all metrics by grouping the data by user and date, storing this aggregated data in a new dataframe named per_day.
 
-Case Study Roadmap - Process 
+```{r message=FALSE, warning=FALSE, engineer features, message=FALSE, include=FALSE}
 
-Guiding questions
+daily_activity$TotalMinutes <- daily_activity$VeryActiveMinutes + 
+  daily_activity$FairlyActiveMinutes + 
+  daily_activity$LightlyActiveMinutes + 
+  daily_activity$SedentaryMinutes
+per_day <-  daily_activity %>% select(Id, TotalSteps, TotalDistance, VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance, SedentaryActiveDistance, VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes, SedentaryMinutes, Calories, TotalMinutes) %>% 
+  group_by(Id) %>% 
+  summarise(steps_per_day = mean(TotalSteps), 
+            distance_per_day = mean(TotalDistance), 
+            minutes_per_day = mean(TotalMinutes), 
+            Calories_per_day = mean(Calories),
+            VeryActiveDistance_per_day = mean(VeryActiveDistance), 
+            ModeratelyActiveDistance_per_day = mean(ModeratelyActiveDistance),
+            LightActiveDistance_per_day = mean(LightActiveDistance),
+            SedentaryActiveDistance_per_day = mean(SedentaryActiveDistance),
+            VeryActiveMinutes_per_day = mean(VeryActiveMinutes),
+            FairlyActiveMinutes_per_day = mean(FairlyActiveMinutes),
+            LightlyActiveMinutes_per_day = mean(LightlyActiveMinutes),
+            SedentaryMinutes_per_day = mean(SedentaryMinutes)
+            )
+heartrate_daily <- heartrate %>% select(Id, Date, Hour, mean_HR) %>% group_by(Id) %>% summarise(mean_HR_day = mean(mean_HR))
+sleep_per_day <- sleepday %>% select(Id, TotalMinutesAsleep, TotalTimeInBed, Date) %>% 
+  group_by(Id) %>% summarise(mean_sleep_minutes = mean(TotalMinutesAsleep), 
+                             mean_time_in_bed_minutes = mean(TotalTimeInBed))
 
-- What tools are you choosing and why?
-- Have you ensured your data’s integrity?
-- What steps have you taken to ensure that your data is clean?
-- How can you verify that your data is clean and ready to analyze?
-- Have you documented your cleaning process so you can review and share those results?
+per_day <- left_join(per_day, sleep_per_day)
+```
 
-Key tasks
-
-1. Check the data for errors.
-2. Choose your tools.
-3. Transform the data so you can work with it effectively.
-4. Document the cleaning process.
-
-Deliverable
-
-Documentation of any cleaning or manipulation of data
-
-## Analyze
-Now that your data is stored appropriately and has been prepared for analysis, start putting it to work. Use the following Case Study Roadmap as a guide:
-
-Case Study Roadmap - Analyze
-
-Guiding questions
-
-- How should you organize your data to perform analysis on it?
-- Has your data been properly formatted?
-- What surprises did you discover in the data?
-- What trends or relationships did you and in the data?
-- How will these insights help answer your business questions?
-
-Key tasks
-
-1. Aggregate your data so it’s useful and accessible.
-2. Organize and format your data.
-3. Perform calculations.
-4. Identify trends and relationships.
-
-Deliverable
-
-A summary of your analysis
-
-To get started in R
-Open your preferred version of R, click this link, and select “Use template.” Then, copy and paste the text from the template into an R script.
-
-1. Begin importing your data.
-2. Explore your data, gathering some summary statistics
-3. Clean and transform your data to prepare for analysis
-4. Create some initial exploratory visualizations
+            
 
 ## Share
 

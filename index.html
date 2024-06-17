@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Anonymous" />
 
 
-<title>index.knit</title>
+<title>Untitled</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -348,976 +349,237 @@ display: none;
 
 
 
+<h1 class="title toc-ignore">Untitled</h1>
+<h4 class="author">Anonymous</h4>
 
 </div>
 
 
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>function_files &lt;- list.files(&quot;./functions&quot;, full.names = TRUE)
-
-for (file in function_files) {
-    source(file)
-}</code></pre>
-<div id="project-information" class="section level1">
-<h1>Project Information</h1>
-<p>lorem ipsum</p>
-<details>
-<summary>
-<strong><em>About the Scenario</em></strong>
-</summary>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>Welcome to the Bellabeat data analysis case study! In this case
-study, you will perform many real-world tasks of a junior data analyst.
-You will imagine you are working for Bellabeat, a high-tech manufacturer
-of health-focused products for women, and meet different characters and
-team members. In order to answer the key business questions, you will
-follow the steps of the data analysis process: ask, prepare, process,
-analyze, share, and act. Along the way, the Case Study Roadmap tables —
-including guiding questions and key tasks — will help you stay on the
-right path.</p>
-<p>By the end of this lesson, you will have a portfolio-ready case
-study. Download the packet and reference the details of this case study
-anytime. Then, when you begin your job hunt, your case study will be a
-tangible way to demonstrate your knowledge and skills to potential
-employers.</p>
+<div id="business-task" class="section level1">
+<h1>Business Task</h1>
+<p>The primary objective of this analysis is to explore the relationship
+between Bellabeat users and their usage of Bellabeat products. We aim to
+define user groups based on their habits and create usage scenarios for
+each group. By addressing the following questions, we will gain insights
+to inform Bellabeat’s marketing strategy and product development:<br />
+1. Are there distinct user groups based on product usage?<br />
+2. How do these user groups differ in their usage of the product?<br />
+3. How can this analysis benefit these user groups by profiling their
+needs?<br />
+4. Are there patterns in product usage, and what are the usage habits of
+each group?<br />
+5. Can we identify patterns in the data that can be leveraged to
+maximize benefits for all users?<br />
+The task is to analyze the usage data from Bellabeat’s smart devices and
+app to identify distinct user groups and their respective usage
+patterns. Understanding these groups and their behaviors will enable
+Bellabeat to tailor its marketing strategies to better meet user needs,
+enhance user satisfaction, and drive growth. This analysis involves
+segmenting users based on their habits, identifying usage scenarios, and
+leveraging data patterns to provide actionable recommendations for
+maximizing user benefits.</p>
 </div>
-<div id="scenario" class="section level2">
-<h2>Scenario</h2>
-<p>You are a junior data analyst working on the marketing analyst team
-at Bellabeat, a high-tech manufacturer of health-focused products for
-women. Bellabeat is a successful small company, but they have the
-potential to become a larger player in the global smart device market.
-Urška Sršen, cofounder and Chief Creative Offcer of Bellabeat, believes
-that analyzing smart device fitness data could help unlock new growth
-opportunities for the company. You have been asked to focus on one of
-Bellabeat’s products and analyze smart device data to gain insight into
-how consumers are using their smart devices. The insights you discover
-will then help guide marketing strategy for the company. You will
-present your analysis to the Bellabeat executive team along with your
-high-level recommendations for Bellabeat’s marketing strategy.</p>
+<div id="data-sources" class="section level1">
+<h1>Data Sources</h1>
+<p>The data for this analysis was sourced from Kaggle and is available
+at Kaggle - Fitbit Dataset. It consists of a zip file containing two
+datasets:<br />
+1. Fitabase Data 3.12.16-4.11.16<br />
+2. Fitabase Data 4.12.16-5.12.16<br />
+For this exercise, we will use the Fitabase Data 4.12.16-5.12.16
+dataset.</p>
+<div id="data-files" class="section level2">
+<h2>Data Files</h2>
+<p>The dataset contains the following 18 CSV files:<br />
+• dailyActivity_merged.csv<br />
+• dailyCalories_merged.csv<br />
+• dailyIntensities_merged.csv<br />
+• dailySteps_merged.csv<br />
+• heartrate_seconds_merged.csv<br />
+• hourlyCalories_merged.csv<br />
+• hourlyIntensities_merged.csv<br />
+• hourlySteps_merged.csv<br />
+• minuteCaloriesNarrow_merged.csv<br />
+• minuteCaloriesWide_merged.csv<br />
+• minuteIntensitiesNarrow_merged.csv<br />
+• minuteIntensitiesWide_merged.csv<br />
+• minuteMETsNarrow_merged.csv<br />
+• minuteSleep_merged.csv<br />
+• minuteStepsNarrow_merged.csv<br />
+• minuteStepsWide_merged.csv<br />
+• sleepDay_merged.csv<br />
+• weightLogInfo_merged.csv</p>
 </div>
-<div id="characters-and-products" class="section level2">
-<h2>Characters and products</h2>
-<p><strong><em>Characters</em></strong></p>
-<p><em>Urška Sršen:</em> Bellabeat’s cofounder and Chief Creative
-Officer</p>
-<p><em>Sando Mur:</em> Mathematician and Bellabeat’s cofounder; key
-member of the Bellabeat executive team</p>
-<p><em>Bellabeat marketing analytics team:</em> A team of data analysts
-responsible for collecting, analyzing, and reporting data that helps
-guide Bellabeat’s marketing strategy. You joined this team six months
-ago and have been busy learning about Bellabeat’’s mission and business
-goals — as well as how you, as a junior data analyst, can help Bellabeat
-achieve them.</p>
-<p><strong><em>Products</em></strong></p>
-<p><em>Bellabeat app:</em> The Bellabeat app provides users with health
-data related to their activity, sleep, stress, menstrual cycle, and
-mindfulness habits. This data can help users better understand their
-current habits and make healthy decisions. The Bellabeat app connects to
-their line of smart wellness products.</p>
-<p><em>Leaf:</em> Bellabeat’s classic wellness tracker can be worn as a
-bracelet, necklace, or clip. The Leaf tracker connects to the Bellabeat
-app to track activity, sleep, and stress.</p>
-<p><em>Time:</em> This wellness watch combines the timeless look of a
-classic timepiece with smart technology to track user activity, sleep,
-and stress. The Time watch connects to the Bellabeat app to provide you
-with insights into your daily wellness.</p>
-<p><em>Spring:</em> This is a water bottle that tracks daily water
-intake using smart technology to ensure that you are appropriately
-hydrated throughout the day. The Spring bottle connects to the Bellabeat
-app to track your hydration levels.</p>
-<p><em>Bellabeat membership:</em> Bellabeat also offers a
-subscription-based membership program for users. Membership gives users
-24/7 access to fully personalized guidance on nutrition, activity,
-sleep, health and beauty, and mindfulness based on their lifestyle and
-goals.</p>
+<div id="data-loading" class="section level2">
+<h2>Data Loading</h2>
+<p>The data has been unzipped and placed in the ./data folder. Each of
+these CSV files was loaded into the global environment as data frames
+using a custom load_csv_files function.</p>
 </div>
-<div id="about-the-company" class="section level2">
-<h2>About The Company</h2>
-<p>Urška Sršen and Sando Mur founded Bellabeat, a high-tech company that
-manufactures health-focused smart products. Sršen used her background as
-an anaist to develop beautifully designed technology that informs and
-inspires women around the world. Collecting data on activity, sleep,
-stress, and reproductive health has allowed Bellabeat to empower women
-with knowledge about their own health and habits. Since it was founded
-in 2013, Bellabeat has grown rapidly and quickly positioned itself as a
-tech-driven wellness company for women.</p>
-<p>By 2016, Bellabeat had opened offices around the world and launched
-multiple products. Bellabeat products became available through a growing
-number of online retailers in addition to their own e-commerce channel
-on their website. The company has invested in traditional advertising
-media, such as radio, out-of-home billboards, print, and television, but
-focuses on digital marketing extensively. Bellabeat invests year-round
-in Google Search, maintaining active Facebook and Instagram pages, and
-consistently engages consumers on Twitter. Additionally, Bellabeat runs
-video ads on Youtube and display ads on the Google Display Network to
-support campaigns around key marketing dates.</p>
-<p>Sršen knows that an analysis of Bellabeat’s available consumer data
-would reveal more opportunities for growth. She has asked the marketing
-analytics team to focus on a Bellabeat product and analyze smart device
-usage data in order to gain insight into how people are already using
-their smart devices. Then, using this information, she would like
-high-level recommendations for how these trends can inform Bellabeat
-marketing strategy.</p>
-</details>
+<div id="data-overview" class="section level2">
+<h2>Data Overview</h2>
+<p>Using the skim function, a preliminary overview of the data was
+obtained. The dataset consists of 18 CSV files that can be categorized
+as follows:</p>
+<p>• Daily Data:<br />
+o dailyActivity_merged<br />
+o dailyCalories_merged<br />
+o dailyIntensities_merged<br />
+o dailySteps_merged<br />
+• Hourly Data:<br />
+o hourlyCalories_merged<br />
+o hourlyIntensities_merged<br />
+o hourlySteps_merged<br />
+• Minutely Data:<br />
+o minuteCaloriesNarrow_merged<br />
+o minuteCaloriesWide_merged<br />
+o minuteIntensitiesNarrow_merged<br />
+o minuteIntensitiesWide_merged<br />
+o minuteMETsNarrow_merged<br />
+o minuteSleep_merged<br />
+o minuteStepsNarrow_merged<br />
+o minuteStepsWide_merged<br />
+• Other Data:<br />
+o heartrate_seconds_merged<br />
+o sleepDay_merged<br />
+o weightLogInfo_merged</p>
 </div>
-<div id="ask" class="section level2">
-<h2>Ask</h2>
-<p>Sršen asks you to analyze smart device usage data in order to gain
-insight into how consumers use non-Bellabeat smart devices. She then
-wants you to select one Bellabeat product to apply these insights to in
-your presentation. These questions will guide your analysis:</p>
+<div id="data-merging" class="section level2">
+<h2>Data Merging</h2>
+<p>• Daily Data:<br />
+o dailyActivity_merged is already a merge of dailyCalories_merged,
+dailyIntensities_merged, and dailySteps_merged.<br />
+o sleepDay_merged can be joined with dailyActivity_merged as both
+contain daily records.<br />
+• Hourly Data:<br />
+o Hourly data files can be merged to create hourlyActivity_merged.<br />
+• Minutely Data:<br />
+o Minutely data files can be merged to create
+minuteActivity_merged.<br />
+The merged datasets will provide a comprehensive view of user activity
+at different time intervals, enabling a detailed analysis of user habits
+and usage patterns.</p>
+</div>
+<div id="data-cleaning-and-manipulation" class="section level2">
+<h2>Data Cleaning and Manipulation</h2>
+<p>Before proceeding with the analysis, the following steps will be
+taken to clean and manipulate the data:<br />
+1. Handling Missing Values: Missing values will be identified and
+appropriately handled (e.g., imputation, removal).<br />
+2. Removing Duplicates: Duplicate records will be removed to ensure data
+integrity.<br />
+3. Data Type Conversion: Ensure all columns have the correct data types
+(e.g., datetime for date columns).<br />
+4. Merging Data: Merge the datasets as described to create comprehensive
+daily, hourly, and minutely datasets.</p>
+</div>
+<div id="data-preparation-steps" class="section level2">
+<h2>Data Preparation Steps</h2>
 <ol style="list-style-type: decimal">
-<li>What are some trends in smart device usage?</li>
-<li>How could these trends apply to Bellabeat customers?</li>
-<li>How could these trends help influence Bellabeat marketing
-strategy?</li>
+<li><p>Drop Unnecessary DataFrames: Since dailyActivity_merged is
+already a combination of dailyCalories_merged, dailyIntensities_merged,
+and dailySteps_merged, these separate dataframes are not needed and were
+dropped from the environment.</p></li>
+<li><p>Check for Missing Values:</p></li>
 </ol>
-<p>You will produce a report with the following deliverables:</p>
+<p>All data frames were checked for missing values. No missing values
+were found in any of the data frames.<br />
+3. Remove Duplicates:</p>
+<p>• minuteSleep_merged had 543 duplicates. • sleepDay_merged had 3
+duplicates.</p>
+<p>Duplicates were removed and the data was rechecked to confirm there
+were no remaining duplicates.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Data Shape and Types:</li>
+</ol>
+<p>Each data frame was inspected for the number of observations and
+variables. The observations range from 940 to approximately 2.5 million.
+It was noted that the variables related to dates and times are stored as
+text data (<chr> data type), which can cause issues in comparisons and
+calculations.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Convert Date and Time Columns to Proper Data Types:<br />
+Date and time columns were converted to appropriate datetime formats
+(POSIXct). This ensures proper handling and manipulation of date and
+time data.</p></li>
+<li><p>Splitting Date and Time Columns:<br />
+The datetime values need to be split and properly formatted in the other
+data frames as well. Given the number of data frames (14), this could be
+a time-consuming process. To streamline this, a split_datetime_column
+function was created to find and format these values efficiently. This
+function will be used iteratively on the data frames that are not
+dailyActivity_merged, splitting dates and times and then splitting the
+time values into Hour, Minute, and Second variables.</p></li>
+</ol>
+<div id="handling-specific-data-frames" class="section level3">
+<h3>Handling Specific Data Frames</h3>
 <ol style="list-style-type: decimal">
-<li>A clear summary of the business task</li>
-<li>A description of all data sources used</li>
-<li>Documentation of any cleaning or manipulation of data</li>
-<li>A summary of your analysis</li>
-<li>Supporting visualizations and key findings</li>
-<li>Your top high-level content recommendations based on your
-analysis</li>
+<li><p>heartrate_seconds_merged<br />
+The heartrate_seconds_merged dataframe has a seconds variable, which
+isn’t directly comparable with other data frames. To make it useful, the
+mean heart rates for each minute will be calculated.</p></li>
+<li><p>weightLogInfo_merged<br />
+In the weightLogInfo_merged dataframe, only the LogId variable
+differentiates the information, and there is no way to relate it with
+time. Therefore, the data will be grouped by Id to obtain a mean weight
+for each person.</p></li>
 </ol>
-<p>Guiding questions</p>
-<ul>
-<li>What is the problem you are trying to solve?</li>
-<li>How can your insights drive business decisions?</li>
-</ul>
-<p>Key tasks</p>
-<ol style="list-style-type: decimal">
-<li>Identify the business task</li>
-<li>Consider key stakeholders</li>
-</ol>
-<p>Deliverable</p>
-<p>A clear statement of the business task</p>
 </div>
-<div id="prepare" class="section level2">
-<h2>Prepare</h2>
-<p>The data for this task was available at <a href="https://www.kaggle.com/datasets/arashnic/fitbit" class="uri">https://www.kaggle.com/datasets/arashnic/fitbit</a>. It
-consisted of a zip file containing two files:</p>
-<p>Fitabase Data 3.12.16-4.11.16 Fitabase Data 4.12.16-5.12.16</p>
-<p>For this exercise I will use only Fitabase Data 4.12.16-5.12.16 data
-set.</p>
-<p>There are following 18 files in the zip file:</p>
-<p>dailyActivity_merged.csv dailyCalories_merged.csv
-dailyIntensities_merged.csv dailySteps_merged.csv
-heartrate_seconds_merged.csv hourlyCalories_merged.csv
-hourlyIntensities_merged.csv hourlySteps_merged.csv
-minuteCaloriesNarrow_merged.csv minuteCaloriesWide_merged.csv
-minuteIntensitiesNarrow_merged.csv minuteIntensitiesWide_merged.csv
-minuteMETsNarrow_merged.csv minuteSleep_merged.csv
-minuteStepsNarrow_merged.csv minuteStepsWide_merged.csv
-sleepDay_merged.csv weightLogInfo_merged.csv</p>
-<p>I have already unzipped the data from the zip file put the csv files
-in my ./data folder. Now I will load each of these csv files as data
-frames to my global environment using this function i wrote.</p>
-<pre class="r"><code>dataframes &lt;- load_csv_files(&quot;./data&quot;)</code></pre>
-<pre><code>## File ./data/dailyActivity_merged.csv loaded. 
-## File ./data/dailyCalories_merged.csv loaded. 
-## File ./data/dailyIntensities_merged.csv loaded. 
-## File ./data/dailySteps_merged.csv loaded. 
-## File ./data/heartrate_seconds_merged.csv loaded. 
-## File ./data/hourlyCalories_merged.csv loaded. 
-## File ./data/hourlyIntensities_merged.csv loaded. 
-## File ./data/hourlySteps_merged.csv loaded. 
-## File ./data/minuteCaloriesNarrow_merged.csv loaded. 
-## File ./data/minuteCaloriesWide_merged.csv loaded. 
-## File ./data/minuteIntensitiesNarrow_merged.csv loaded. 
-## File ./data/minuteIntensitiesWide_merged.csv loaded. 
-## File ./data/minuteMETsNarrow_merged.csv loaded. 
-## File ./data/minuteSleep_merged.csv loaded. 
-## File ./data/minuteStepsNarrow_merged.csv loaded. 
-## File ./data/minuteStepsWide_merged.csv loaded. 
-## File ./data/sleepDay_merged.csv loaded. 
-## File ./data/weightLogInfo_merged.csv loaded.</code></pre>
-<p>We loaded 18 data frames. Let’s have a look at the data:</p>
-<pre class="r"><code>for (df_name in dataframes) {
-  cat(&quot;Dataframe:&quot;, df_name, &quot;\n&quot;)
-  str(get(df_name), give.attr = FALSE)
-  cat(&quot;\n&quot;)
-}</code></pre>
-<pre><code>## Dataframe: dailyActivity_merged 
-## spc_tbl_ [940 × 15] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id                      : num [1:940] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityDate            : chr [1:940] &quot;4/12/2016&quot; &quot;4/13/2016&quot; &quot;4/14/2016&quot; &quot;4/15/2016&quot; ...
-##  $ TotalSteps              : num [1:940] 13162 10735 10460 9762 12669 ...
-##  $ TotalDistance           : num [1:940] 8.5 6.97 6.74 6.28 8.16 ...
-##  $ TrackerDistance         : num [1:940] 8.5 6.97 6.74 6.28 8.16 ...
-##  $ LoggedActivitiesDistance: num [1:940] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ VeryActiveDistance      : num [1:940] 1.88 1.57 2.44 2.14 2.71 ...
-##  $ ModeratelyActiveDistance: num [1:940] 0.55 0.69 0.4 1.26 0.41 ...
-##  $ LightActiveDistance     : num [1:940] 6.06 4.71 3.91 2.83 5.04 ...
-##  $ SedentaryActiveDistance : num [1:940] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ VeryActiveMinutes       : num [1:940] 25 21 30 29 36 38 42 50 28 19 ...
-##  $ FairlyActiveMinutes     : num [1:940] 13 19 11 34 10 20 16 31 12 8 ...
-##  $ LightlyActiveMinutes    : num [1:940] 328 217 181 209 221 164 233 264 205 211 ...
-##  $ SedentaryMinutes        : num [1:940] 728 776 1218 726 773 ...
-##  $ Calories                : num [1:940] 1985 1797 1776 1745 1863 ...
-## 
-## Dataframe: dailyCalories_merged 
-## spc_tbl_ [940 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id         : num [1:940] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityDay: chr [1:940] &quot;4/12/2016&quot; &quot;4/13/2016&quot; &quot;4/14/2016&quot; &quot;4/15/2016&quot; ...
-##  $ Calories   : num [1:940] 1985 1797 1776 1745 1863 ...
-## 
-## Dataframe: dailyIntensities_merged 
-## spc_tbl_ [940 × 10] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id                      : num [1:940] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityDay             : chr [1:940] &quot;4/12/2016&quot; &quot;4/13/2016&quot; &quot;4/14/2016&quot; &quot;4/15/2016&quot; ...
-##  $ SedentaryMinutes        : num [1:940] 728 776 1218 726 773 ...
-##  $ LightlyActiveMinutes    : num [1:940] 328 217 181 209 221 164 233 264 205 211 ...
-##  $ FairlyActiveMinutes     : num [1:940] 13 19 11 34 10 20 16 31 12 8 ...
-##  $ VeryActiveMinutes       : num [1:940] 25 21 30 29 36 38 42 50 28 19 ...
-##  $ SedentaryActiveDistance : num [1:940] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ LightActiveDistance     : num [1:940] 6.06 4.71 3.91 2.83 5.04 ...
-##  $ ModeratelyActiveDistance: num [1:940] 0.55 0.69 0.4 1.26 0.41 ...
-##  $ VeryActiveDistance      : num [1:940] 1.88 1.57 2.44 2.14 2.71 ...
-## 
-## Dataframe: dailySteps_merged 
-## spc_tbl_ [940 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id         : num [1:940] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityDay: chr [1:940] &quot;4/12/2016&quot; &quot;4/13/2016&quot; &quot;4/14/2016&quot; &quot;4/15/2016&quot; ...
-##  $ StepTotal  : num [1:940] 13162 10735 10460 9762 12669 ...
-## 
-## Dataframe: heartrate_seconds_merged 
-## spc_tbl_ [2,483,658 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id   : num [1:2483658] 2.02e+09 2.02e+09 2.02e+09 2.02e+09 2.02e+09 ...
-##  $ Time : chr [1:2483658] &quot;4/12/2016 7:21:00 AM&quot; &quot;4/12/2016 7:21:05 AM&quot; &quot;4/12/2016 7:21:10 AM&quot; &quot;4/12/2016 7:21:20 AM&quot; ...
-##  $ Value: num [1:2483658] 97 102 105 103 101 95 91 93 94 93 ...
-## 
-## Dataframe: hourlyCalories_merged 
-## spc_tbl_ [22,099 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id          : num [1:22099] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityHour: chr [1:22099] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 1:00:00 AM&quot; &quot;4/12/2016 2:00:00 AM&quot; &quot;4/12/2016 3:00:00 AM&quot; ...
-##  $ Calories    : num [1:22099] 81 61 59 47 48 48 48 47 68 141 ...
-## 
-## Dataframe: hourlyIntensities_merged 
-## spc_tbl_ [22,099 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id              : num [1:22099] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityHour    : chr [1:22099] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 1:00:00 AM&quot; &quot;4/12/2016 2:00:00 AM&quot; &quot;4/12/2016 3:00:00 AM&quot; ...
-##  $ TotalIntensity  : num [1:22099] 20 8 7 0 0 0 0 0 13 30 ...
-##  $ AverageIntensity: num [1:22099] 0.333 0.133 0.117 0 0 ...
-## 
-## Dataframe: hourlySteps_merged 
-## spc_tbl_ [22,099 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id          : num [1:22099] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityHour: chr [1:22099] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 1:00:00 AM&quot; &quot;4/12/2016 2:00:00 AM&quot; &quot;4/12/2016 3:00:00 AM&quot; ...
-##  $ StepTotal   : num [1:22099] 373 160 151 0 0 ...
-## 
-## Dataframe: minuteCaloriesNarrow_merged 
-## spc_tbl_ [1,325,580 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id            : num [1:1325580] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityMinute: chr [1:1325580] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 12:01:00 AM&quot; &quot;4/12/2016 12:02:00 AM&quot; &quot;4/12/2016 12:03:00 AM&quot; ...
-##  $ Calories      : num [1:1325580] 0.786 0.786 0.786 0.786 0.786 ...
-## 
-## Dataframe: minuteCaloriesWide_merged 
-## spc_tbl_ [21,645 × 62] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id          : num [1:21645] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityHour: chr [1:21645] &quot;4/13/2016 12:00:00 AM&quot; &quot;4/13/2016 1:00:00 AM&quot; &quot;4/13/2016 2:00:00 AM&quot; &quot;4/13/2016 3:00:00 AM&quot; ...
-##  $ Calories00  : num [1:21645] 1.888 0.786 0.786 0.786 0.786 ...
-##  $ Calories01  : num [1:21645] 2.202 0.786 0.786 0.786 0.786 ...
-##  $ Calories02  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories03  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories04  : num [1:21645] 0.944 0.944 0.786 0.786 0.786 ...
-##  $ Calories05  : num [1:21645] 2.045 0.944 0.786 0.786 0.786 ...
-##  $ Calories06  : num [1:21645] 0.944 0.944 0.786 0.786 0.786 ...
-##  $ Calories07  : num [1:21645] 2.202 0.786 0.786 0.786 0.786 ...
-##  $ Calories08  : num [1:21645] 0.944 0.944 0.786 0.786 0.786 ...
-##  $ Calories09  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories10  : num [1:21645] 0.944 0.944 0.786 0.786 0.786 ...
-##  $ Calories11  : num [1:21645] 0.786 0.786 0.786 2.045 0.786 ...
-##  $ Calories12  : num [1:21645] 0.786 0.944 0.786 0.944 0.786 ...
-##  $ Calories13  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories14  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories15  : num [1:21645] 0.944 0.786 0.786 0.944 0.786 ...
-##  $ Calories16  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories17  : num [1:21645] 0.786 0.786 0.786 0.944 0.786 ...
-##  $ Calories18  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories19  : num [1:21645] 0.786 0.786 0.786 0.786 0.944 ...
-##  $ Calories20  : num [1:21645] 1.888 0.786 0.786 0.786 0.786 ...
-##  $ Calories21  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories22  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories23  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories24  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories25  : num [1:21645] 2.045 0.786 0.786 0.786 0.786 ...
-##  $ Calories26  : num [1:21645] 2.359 0.786 0.786 0.786 0.786 ...
-##  $ Calories27  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories28  : num [1:21645] 2.045 0.786 0.786 0.786 0.786 ...
-##  $ Calories29  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories30  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories31  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories32  : num [1:21645] 2.045 0.786 0.786 0.786 0.786 ...
-##  $ Calories33  : num [1:21645] 1.888 0.786 0.786 0.944 0.786 ...
-##  $ Calories34  : num [1:21645] 0.944 0.786 0.786 2.045 0.786 ...
-##  $ Calories35  : num [1:21645] 0.786 0.786 0.786 2.045 0.786 ...
-##  $ Calories36  : num [1:21645] 0.786 0.786 0.786 1.888 0.786 ...
-##  $ Calories37  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories38  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories39  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories40  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories41  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories42  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories43  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories44  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories45  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories46  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories47  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories48  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories49  : num [1:21645] 0.786 0.786 0.786 0.786 0.786 ...
-##  $ Calories50  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories51  : num [1:21645] 2.045 0.786 0.786 0.786 0.786 ...
-##  $ Calories52  : num [1:21645] 2.045 0.786 0.786 0.786 0.786 ...
-##  $ Calories53  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories54  : num [1:21645] 2.359 0.786 0.786 0.786 0.786 ...
-##  $ Calories55  : num [1:21645] 1.888 0.786 0.786 0.786 0.786 ...
-##  $ Calories56  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories57  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories58  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-##  $ Calories59  : num [1:21645] 0.944 0.786 0.786 0.786 0.786 ...
-## 
-## Dataframe: minuteIntensitiesNarrow_merged 
-## spc_tbl_ [1,325,580 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id            : num [1:1325580] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityMinute: chr [1:1325580] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 12:01:00 AM&quot; &quot;4/12/2016 12:02:00 AM&quot; &quot;4/12/2016 12:03:00 AM&quot; ...
-##  $ Intensity     : num [1:1325580] 0 0 0 0 0 0 0 0 0 0 ...
-## 
-## Dataframe: minuteIntensitiesWide_merged 
-## spc_tbl_ [21,645 × 62] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id          : num [1:21645] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityHour: chr [1:21645] &quot;4/13/2016 12:00:00 AM&quot; &quot;4/13/2016 1:00:00 AM&quot; &quot;4/13/2016 2:00:00 AM&quot; &quot;4/13/2016 3:00:00 AM&quot; ...
-##  $ Intensity00 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity01 : num [1:21645] 1 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity02 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity03 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity04 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity05 : num [1:21645] 1 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity06 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity07 : num [1:21645] 1 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity08 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity09 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity10 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity11 : num [1:21645] 0 0 0 1 0 0 0 0 1 1 ...
-##  $ Intensity12 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity13 : num [1:21645] 0 0 0 0 0 0 0 0 1 1 ...
-##  $ Intensity14 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity15 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity16 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity17 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity18 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity19 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity20 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity21 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity22 : num [1:21645] 0 0 0 0 0 0 0 0 1 0 ...
-##  $ Intensity23 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity24 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity25 : num [1:21645] 1 0 0 0 0 0 0 1 0 0 ...
-##  $ Intensity26 : num [1:21645] 1 0 0 0 0 0 0 1 0 0 ...
-##  $ Intensity27 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity28 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity29 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity30 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity31 : num [1:21645] 0 0 0 0 0 0 0 1 0 0 ...
-##  $ Intensity32 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity33 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity34 : num [1:21645] 0 0 0 1 0 0 0 0 0 0 ...
-##  $ Intensity35 : num [1:21645] 0 0 0 1 0 0 0 0 0 0 ...
-##  $ Intensity36 : num [1:21645] 0 0 0 1 0 0 0 0 1 1 ...
-##  $ Intensity37 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity38 : num [1:21645] 0 0 0 0 0 0 0 0 1 1 ...
-##  $ Intensity39 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity40 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity41 : num [1:21645] 0 0 0 0 0 0 0 1 0 0 ...
-##  $ Intensity42 : num [1:21645] 0 0 0 0 0 0 0 1 1 0 ...
-##  $ Intensity43 : num [1:21645] 0 0 0 0 0 0 0 0 1 0 ...
-##  $ Intensity44 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity45 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity46 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity47 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity48 : num [1:21645] 0 0 0 0 0 0 0 0 0 1 ...
-##  $ Intensity49 : num [1:21645] 0 0 0 0 0 0 0 0 1 0 ...
-##  $ Intensity50 : num [1:21645] 0 0 0 0 0 0 0 1 0 0 ...
-##  $ Intensity51 : num [1:21645] 1 0 0 0 0 0 0 1 1 1 ...
-##  $ Intensity52 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity53 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity54 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity55 : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity56 : num [1:21645] 0 0 0 0 0 0 0 0 1 0 ...
-##  $ Intensity57 : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Intensity58 : num [1:21645] 0 0 0 0 0 0 0 0 1 0 ...
-##  $ Intensity59 : num [1:21645] 0 0 0 0 0 0 0 1 1 1 ...
-## 
-## Dataframe: minuteMETsNarrow_merged 
-## spc_tbl_ [1,325,580 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id            : num [1:1325580] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityMinute: chr [1:1325580] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 12:01:00 AM&quot; &quot;4/12/2016 12:02:00 AM&quot; &quot;4/12/2016 12:03:00 AM&quot; ...
-##  $ METs          : num [1:1325580] 10 10 10 10 10 12 12 12 12 12 ...
-## 
-## Dataframe: minuteSleep_merged 
-## spc_tbl_ [188,521 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id   : num [1:188521] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ date : chr [1:188521] &quot;4/12/2016 2:47:30 AM&quot; &quot;4/12/2016 2:48:30 AM&quot; &quot;4/12/2016 2:49:30 AM&quot; &quot;4/12/2016 2:50:30 AM&quot; ...
-##  $ value: num [1:188521] 3 2 1 1 1 1 1 2 2 2 ...
-##  $ logId: num [1:188521] 1.14e+10 1.14e+10 1.14e+10 1.14e+10 1.14e+10 ...
-## 
-## Dataframe: minuteStepsNarrow_merged 
-## spc_tbl_ [1,325,580 × 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id            : num [1:1325580] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityMinute: chr [1:1325580] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/12/2016 12:01:00 AM&quot; &quot;4/12/2016 12:02:00 AM&quot; &quot;4/12/2016 12:03:00 AM&quot; ...
-##  $ Steps         : num [1:1325580] 0 0 0 0 0 0 0 0 0 0 ...
-## 
-## Dataframe: minuteStepsWide_merged 
-## spc_tbl_ [21,645 × 62] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id          : num [1:21645] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ ActivityHour: chr [1:21645] &quot;4/13/2016 12:00:00 AM&quot; &quot;4/13/2016 1:00:00 AM&quot; &quot;4/13/2016 2:00:00 AM&quot; &quot;4/13/2016 3:00:00 AM&quot; ...
-##  $ Steps00     : num [1:21645] 4 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps01     : num [1:21645] 16 0 0 0 0 0 0 0 0 14 ...
-##  $ Steps02     : num [1:21645] 0 0 0 0 0 0 0 0 0 10 ...
-##  $ Steps03     : num [1:21645] 0 0 0 0 0 0 0 0 0 31 ...
-##  $ Steps04     : num [1:21645] 0 0 0 0 0 0 0 0 0 37 ...
-##  $ Steps05     : num [1:21645] 9 0 0 0 0 0 0 0 0 17 ...
-##  $ Steps06     : num [1:21645] 0 0 0 0 0 0 0 0 0 25 ...
-##  $ Steps07     : num [1:21645] 17 0 0 0 0 0 0 0 0 12 ...
-##  $ Steps08     : num [1:21645] 0 0 0 0 0 0 0 0 0 6 ...
-##  $ Steps09     : num [1:21645] 0 0 0 0 0 0 0 0 0 30 ...
-##  $ Steps10     : num [1:21645] 0 0 0 0 0 0 0 0 0 7 ...
-##  $ Steps11     : num [1:21645] 0 0 0 10 0 0 0 0 6 109 ...
-##  $ Steps12     : num [1:21645] 0 0 0 0 0 0 0 0 0 140 ...
-##  $ Steps13     : num [1:21645] 0 0 0 0 0 0 0 0 19 145 ...
-##  $ Steps14     : num [1:21645] 0 0 0 0 0 0 0 0 0 152 ...
-##  $ Steps15     : num [1:21645] 0 0 0 0 0 0 0 0 0 117 ...
-##  $ Steps16     : num [1:21645] 0 0 0 0 0 0 0 0 0 20 ...
-##  $ Steps17     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps18     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps19     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps20     : num [1:21645] 6 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps21     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps22     : num [1:21645] 0 0 0 0 0 0 0 0 32 0 ...
-##  $ Steps23     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps24     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps25     : num [1:21645] 11 0 0 0 0 0 0 26 0 0 ...
-##  $ Steps26     : num [1:21645] 21 0 0 0 0 0 0 11 0 0 ...
-##  $ Steps27     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps28     : num [1:21645] 8 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps29     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps30     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps31     : num [1:21645] 0 0 0 0 0 0 0 9 0 0 ...
-##  $ Steps32     : num [1:21645] 8 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps33     : num [1:21645] 6 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps34     : num [1:21645] 0 0 0 11 0 0 0 0 0 0 ...
-##  $ Steps35     : num [1:21645] 0 0 0 9 0 0 0 0 0 0 ...
-##  $ Steps36     : num [1:21645] 0 0 0 6 0 0 0 0 45 21 ...
-##  $ Steps37     : num [1:21645] 0 0 0 0 0 0 0 0 0 39 ...
-##  $ Steps38     : num [1:21645] 0 0 0 0 0 0 0 0 7 84 ...
-##  $ Steps39     : num [1:21645] 0 0 0 0 0 0 0 0 0 117 ...
-##  $ Steps40     : num [1:21645] 0 0 0 0 0 0 0 0 0 22 ...
-##  $ Steps41     : num [1:21645] 0 0 0 0 0 0 0 28 0 0 ...
-##  $ Steps42     : num [1:21645] 0 0 0 0 0 0 0 7 31 0 ...
-##  $ Steps43     : num [1:21645] 0 0 0 0 0 0 0 0 20 0 ...
-##  $ Steps44     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps45     : num [1:21645] 0 0 0 0 0 0 0 0 0 122 ...
-##  $ Steps46     : num [1:21645] 0 0 0 0 0 0 0 0 0 125 ...
-##  $ Steps47     : num [1:21645] 0 0 0 0 0 0 0 0 0 91 ...
-##  $ Steps48     : num [1:21645] 0 0 0 0 0 0 0 0 0 73 ...
-##  $ Steps49     : num [1:21645] 0 0 0 0 0 0 0 0 19 0 ...
-##  $ Steps50     : num [1:21645] 0 0 0 0 0 0 0 16 0 0 ...
-##  $ Steps51     : num [1:21645] 9 0 0 0 0 0 0 13 21 8 ...
-##  $ Steps52     : num [1:21645] 8 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps53     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps54     : num [1:21645] 20 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps55     : num [1:21645] 1 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps56     : num [1:21645] 0 0 0 0 0 0 0 0 31 0 ...
-##  $ Steps57     : num [1:21645] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Steps58     : num [1:21645] 0 0 0 0 0 0 0 0 42 0 ...
-##  $ Steps59     : num [1:21645] 0 0 0 0 0 0 0 16 2 105 ...
-## 
-## Dataframe: sleepDay_merged 
-## spc_tbl_ [413 × 5] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id                : num [1:413] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
-##  $ SleepDay          : chr [1:413] &quot;4/12/2016 12:00:00 AM&quot; &quot;4/13/2016 12:00:00 AM&quot; &quot;4/15/2016 12:00:00 AM&quot; &quot;4/16/2016 12:00:00 AM&quot; ...
-##  $ TotalSleepRecords : num [1:413] 1 2 1 2 1 1 1 1 1 1 ...
-##  $ TotalMinutesAsleep: num [1:413] 327 384 412 340 700 304 360 325 361 430 ...
-##  $ TotalTimeInBed    : num [1:413] 346 407 442 367 712 320 377 364 384 449 ...
-## 
-## Dataframe: weightLogInfo_merged 
-## spc_tbl_ [67 × 8] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
-##  $ Id            : num [1:67] 1.50e+09 1.50e+09 1.93e+09 2.87e+09 2.87e+09 ...
-##  $ Date          : chr [1:67] &quot;5/2/2016 11:59:59 PM&quot; &quot;5/3/2016 11:59:59 PM&quot; &quot;4/13/2016 1:08:52 AM&quot; &quot;4/21/2016 11:59:59 PM&quot; ...
-##  $ WeightKg      : num [1:67] 52.6 52.6 133.5 56.7 57.3 ...
-##  $ WeightPounds  : num [1:67] 116 116 294 125 126 ...
-##  $ Fat           : num [1:67] 22 NA NA NA NA 25 NA NA NA NA ...
-##  $ BMI           : num [1:67] 22.6 22.6 47.5 21.5 21.7 ...
-##  $ IsManualReport: logi [1:67] TRUE TRUE FALSE TRUE TRUE TRUE ...
-##  $ LogId         : num [1:67] 1.46e+12 1.46e+12 1.46e+12 1.46e+12 1.46e+12 ...</code></pre>
-<ul>
-<li>How is the data organized? Is it in long or wide format?</li>
-</ul>
-<p>the data consist of 18 csv files, can be grouped as daily, hourly,
-and minutely, also has sleep, heart rate and weight log data.</p>
-<p>dailyActivity_merged is a merge of dailyCalories_merged,
-dailyIntensities_merged, and dailySteps_merged.</p>
-<p>hourly and minutely data can also be merged by joining and assigning
-to dataframes hourlyActivity_merged and minuteActivity_merged
-respectively.</p>
-<p>sleepDay_merged may be considered joining with dailyActivity_merged
-as both are dailies.</p>
-<ul>
-<li><p>Are there issues with bias or credibility in this data? Does your
-data ROCCC?</p></li>
-<li><p>How are you addressing licensing, privacy, security, and
-accessibility?</p></li>
-<li><p>How did you verify the data’s integrity?</p></li>
-<li><p>How does it help you answer your question?</p></li>
-<li><p>Are there any problems with the data?</p></li>
-</ul>
-<p>Key tasks</p>
+<div id="creating-merged-dataframes" class="section level3">
+<h3>Creating Merged DataFrames</h3>
 <ol style="list-style-type: decimal">
-<li>Download data and store it appropriately.</li>
-<li>Identify how it’s organized.</li>
-<li>Sort and alter the data.</li>
-<li>Determine the credibility of the data.</li>
+<li><p>Hourly Data<br />
+The hourly_merged dataframe will be created by joining all the hourly*
+dataframes.</p></li>
+<li><p>Minutely Data<br />
+Similarly, the minute_merged dataframe will be created by joining all
+the minute* dataframes.</p></li>
 </ol>
-<p>Deliverable A description of all data sources used</p>
 </div>
-<div id="process" class="section level2">
-<h2>Process</h2>
-<p>First of all, dailyActivity_merged dataframe is the merge of
-dailyCalories_merged, dailyIntensities_merged, and dailySteps_merged
-dataframes. I wont need those seperate dataframes, therefore I will drop
-those three:</p>
-<pre class="r"><code>rm(dailyCalories_merged, dailyIntensities_merged, dailySteps_merged)
-names_to_remove &lt;- c(&quot;dailyCalories_merged&quot;, &quot;dailyIntensities_merged&quot;, &quot;dailySteps_merged&quot;)
-dataframes &lt;- setdiff(dataframes, names_to_remove)</code></pre>
-<pre class="r"><code>names_to_remove &lt;- dataframes[grep(&quot;Wide&quot;, dataframes)]
-names_to_remove &lt;- c(names_to_remove, &quot;minuteSleep_merged&quot;)
-dataframes &lt;- setdiff(dataframes, names_to_remove)
-rm(list = grep(&quot;Wide&quot;, ls(), value = TRUE), envir = .GlobalEnv)</code></pre>
-<p>I will check for NA values in my dataframes:</p>
-<pre class="r"><code>for (df_name in dataframes) {
-  cat( df_name, &quot;dataframe&quot;, &quot;has&quot;, sapply(df_name, function(x) sum(is.na(x))), &quot;NAs.&quot;, &quot;\n&quot;)
-}</code></pre>
-<pre><code>## dailyActivity_merged dataframe has 0 NAs. 
-## heartrate_seconds_merged dataframe has 0 NAs. 
-## hourlyCalories_merged dataframe has 0 NAs. 
-## hourlyIntensities_merged dataframe has 0 NAs. 
-## hourlySteps_merged dataframe has 0 NAs. 
-## minuteCaloriesNarrow_merged dataframe has 0 NAs. 
-## minuteIntensitiesNarrow_merged dataframe has 0 NAs. 
-## minuteMETsNarrow_merged dataframe has 0 NAs. 
-## minuteSleep_merged dataframe has 0 NAs. 
-## minuteStepsNarrow_merged dataframe has 0 NAs. 
-## sleepDay_merged dataframe has 0 NAs. 
-## weightLogInfo_merged dataframe has 0 NAs.</code></pre>
-<p>There are no NA’s in our dataframes.</p>
-<p>Now I want to check for duplicates:</p>
-<pre class="r"><code>for (df_name in dataframes) {
-  df &lt;- get(df_name)  
-  num_duplicates &lt;- sum(duplicated(df)) 
-  cat(df_name, &quot;has&quot;, num_duplicates, &quot;duplicates.&quot;, &quot;\n&quot;) 
-}</code></pre>
-<pre><code>## dailyActivity_merged has 0 duplicates. 
-## heartrate_seconds_merged has 0 duplicates. 
-## hourlyCalories_merged has 0 duplicates. 
-## hourlyIntensities_merged has 0 duplicates. 
-## hourlySteps_merged has 0 duplicates. 
-## minuteCaloriesNarrow_merged has 0 duplicates. 
-## minuteIntensitiesNarrow_merged has 0 duplicates. 
-## minuteMETsNarrow_merged has 0 duplicates. 
-## minuteStepsNarrow_merged has 0 duplicates. 
-## sleepDay_merged has 3 duplicates. 
-## weightLogInfo_merged has 0 duplicates.</code></pre>
-<p>minuteSleep_merged has 543, and sleepDay_merged has 3 duplicates. I
-want to remove them and recheck.</p>
-<pre class="r"><code>dataframes_with_duplicates &lt;- c(&quot;minuteSleep_merged&quot;, &quot;sleepDay_merged&quot;)
-minuteSleep_merged &lt;- minuteSleep_merged[!duplicated(minuteSleep_merged), ]
-sleepDay_merged &lt;- sleepDay_merged[!duplicated(sleepDay_merged), ]
-
-
-for (df_name in dataframes_with_duplicates) {
-  df &lt;- get(df_name)  
-  num_duplicates &lt;- sum(duplicated(df)) 
-  cat(df_name, &quot;has&quot;, num_duplicates, &quot;duplicates.&quot;, &quot;\n&quot;) 
-}</code></pre>
-<pre><code>## minuteSleep_merged has 0 duplicates. 
-## sleepDay_merged has 0 duplicates.</code></pre>
-<p>For each data frame we have varying shapes of observations and
-variables, which range from 940 to ~2.5M. First thing we see is that the
-variables related to dates and times have <chr> datatypes. This
-indicates the data is stored as text data, and will create problems in
-comparisons and calculations. I want to convert them to proper date and
-time datatypes, i.e. POSIXcts. dailyActivity_merged data frame has a
-date variable containing only date strings in %m/%d/%Y format and can
-easily be converted to POSIXct:</p>
-<pre class="r"><code>dailyActivity_merged$Date &lt;- as.POSIXct(dailyActivity_merged$ActivityDate, 
-                                                format = &quot;%m/%d/%Y&quot;, 
-                                                tz = &quot;UTC&quot;)
-
-dailyActivity_merged &lt;- subset(dailyActivity_merged, select = -ActivityDate)</code></pre>
-<p>Also the datetime values need to be splitted and properly formatted
-in the other data frames too. That could be time consuming for all those
-14 data frames, therefore I wrote a split_datetime_column function to
-find and format those values. I will use the function iteratively on the
-data frames that are not dailyActivity_merged, splitting dates and
-times, and then splits the time values Hour, Minute, and Second
-variables.</p>
-<pre class="r"><code>filtered_dataframes &lt;- dataframes[!grepl(&quot;daily&quot;, dataframes)]
-for (df_name in filtered_dataframes) {
-  cat(df_name, &quot;...&quot;)
-  split_datetime_column(df_name)
-  cat(&quot;done.&quot;, &quot;\n&quot;)
-}</code></pre>
-<pre><code>## heartrate_seconds_merged ...done. 
-## hourlyCalories_merged ...done. 
-## hourlyIntensities_merged ...done. 
-## hourlySteps_merged ...done. 
-## minuteCaloriesNarrow_merged ...done. 
-## minuteIntensitiesNarrow_merged ...done. 
-## minuteMETsNarrow_merged ...done. 
-## minuteStepsNarrow_merged ...done. 
-## sleepDay_merged ...done. 
-## weightLogInfo_merged ...done.</code></pre>
-<p>heartrate_seconds_merged dataframe has a seconds variable, but i have
-nothing in other dataframes that can be compared with that. I will get
-the mean heart rates for each minute using the values of seconds.</p>
-<pre class="r"><code>heartrate_seconds_merged &lt;- heartrate_seconds_merged %&gt;% group_by(Id, Date, Hour, Minute) %&gt;% summarise(mean_HR = mean(Value))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;Id&#39;, &#39;Date&#39;, &#39;Hour&#39;. You can override
-## using the `.groups` argument.</code></pre>
-<p>In weightLogInfo_merged we only have LogId variable to differentiate
-the information and we do not have to relate it with time or anything
-else, therefore I will group the data by Ids and have a mean weight for
-each person.</p>
-<pre class="r"><code>weightLogInfo_merged &lt;- weightLogInfo_merged %&gt;%
-  select(Id, WeightKg, BMI) %&gt;% group_by(Id) %&gt;% summarise(mean_weight = mean(WeightKg), mean_BMI = mean(BMI))</code></pre>
-<p>Let’s have a quick look to updated dataframes:</p>
-<pre class="r"><code>for (df_name in dataframes) {
-  cat(&quot;Dataframe:&quot;, df_name, &quot;\n&quot;)
-  print(head(get(df_name),5))
-  cat(&quot;\n&quot;)
-}</code></pre>
-<pre><code>## Dataframe: dailyActivity_merged 
-## # A tibble: 5 × 15
-##           Id TotalSteps TotalDistance TrackerDistance LoggedActivitiesDistance
-##        &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;                    &lt;dbl&gt;
-## 1 1503960366      13162          8.5             8.5                         0
-## 2 1503960366      10735          6.97            6.97                        0
-## 3 1503960366      10460          6.74            6.74                        0
-## 4 1503960366       9762          6.28            6.28                        0
-## 5 1503960366      12669          8.16            8.16                        0
-## # ℹ 10 more variables: VeryActiveDistance &lt;dbl&gt;,
-## #   ModeratelyActiveDistance &lt;dbl&gt;, LightActiveDistance &lt;dbl&gt;,
-## #   SedentaryActiveDistance &lt;dbl&gt;, VeryActiveMinutes &lt;dbl&gt;,
-## #   FairlyActiveMinutes &lt;dbl&gt;, LightlyActiveMinutes &lt;dbl&gt;,
-## #   SedentaryMinutes &lt;dbl&gt;, Calories &lt;dbl&gt;, Date &lt;dttm&gt;
-## 
-## Dataframe: heartrate_seconds_merged 
-## # A tibble: 5 × 5
-## # Groups:   Id, Date, Hour [1]
-##           Id Date        Hour Minute mean_HR
-##        &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-## 1 2022484408 2016-04-12     7     21   102. 
-## 2 2022484408 2016-04-12     7     22    87.9
-## 3 2022484408 2016-04-12     7     23    58  
-## 4 2022484408 2016-04-12     7     24    58  
-## 5 2022484408 2016-04-12     7     25    56.8
-## 
-## Dataframe: hourlyCalories_merged 
-## # A tibble: 5 × 6
-##           Id Calories Date        Hour Minute Second
-##        &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366       81 2016-04-12     0      0      0
-## 2 1503960366       61 2016-04-12     1      0      0
-## 3 1503960366       59 2016-04-12     2      0      0
-## 4 1503960366       47 2016-04-12     3      0      0
-## 5 1503960366       48 2016-04-12     4      0      0
-## 
-## Dataframe: hourlyIntensities_merged 
-## # A tibble: 5 × 7
-##           Id TotalIntensity AverageIntensity Date        Hour Minute Second
-##        &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366             20            0.333 2016-04-12     0      0      0
-## 2 1503960366              8            0.133 2016-04-12     1      0      0
-## 3 1503960366              7            0.117 2016-04-12     2      0      0
-## 4 1503960366              0            0     2016-04-12     3      0      0
-## 5 1503960366              0            0     2016-04-12     4      0      0
-## 
-## Dataframe: hourlySteps_merged 
-## # A tibble: 5 × 6
-##           Id StepTotal Date        Hour Minute Second
-##        &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366       373 2016-04-12     0      0      0
-## 2 1503960366       160 2016-04-12     1      0      0
-## 3 1503960366       151 2016-04-12     2      0      0
-## 4 1503960366         0 2016-04-12     3      0      0
-## 5 1503960366         0 2016-04-12     4      0      0
-## 
-## Dataframe: minuteCaloriesNarrow_merged 
-## # A tibble: 5 × 6
-##           Id Calories Date        Hour Minute Second
-##        &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366    0.786 2016-04-12     0      0      0
-## 2 1503960366    0.786 2016-04-12     0      1      0
-## 3 1503960366    0.786 2016-04-12     0      2      0
-## 4 1503960366    0.786 2016-04-12     0      3      0
-## 5 1503960366    0.786 2016-04-12     0      4      0
-## 
-## Dataframe: minuteIntensitiesNarrow_merged 
-## # A tibble: 5 × 6
-##           Id Intensity Date        Hour Minute Second
-##        &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366         0 2016-04-12     0      0      0
-## 2 1503960366         0 2016-04-12     0      1      0
-## 3 1503960366         0 2016-04-12     0      2      0
-## 4 1503960366         0 2016-04-12     0      3      0
-## 5 1503960366         0 2016-04-12     0      4      0
-## 
-## Dataframe: minuteMETsNarrow_merged 
-## # A tibble: 5 × 6
-##           Id  METs Date        Hour Minute Second
-##        &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366    10 2016-04-12     0      0      0
-## 2 1503960366    10 2016-04-12     0      1      0
-## 3 1503960366    10 2016-04-12     0      2      0
-## 4 1503960366    10 2016-04-12     0      3      0
-## 5 1503960366    10 2016-04-12     0      4      0
-## 
-## Dataframe: minuteStepsNarrow_merged 
-## # A tibble: 5 × 6
-##           Id Steps Date        Hour Minute Second
-##        &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1503960366     0 2016-04-12     0      0      0
-## 2 1503960366     0 2016-04-12     0      1      0
-## 3 1503960366     0 2016-04-12     0      2      0
-## 4 1503960366     0 2016-04-12     0      3      0
-## 5 1503960366     0 2016-04-12     0      4      0
-## 
-## Dataframe: sleepDay_merged 
-## # A tibble: 5 × 7
-##       Id TotalSleepRecords TotalMinutesAsleep TotalTimeInBed  Hour Minute Second
-##    &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 1.50e9                 1                327            346     0      0      0
-## 2 1.50e9                 2                384            407     0      0      0
-## 3 1.50e9                 1                412            442     0      0      0
-## 4 1.50e9                 2                340            367     0      0      0
-## 5 1.50e9                 1                700            712     0      0      0
-## 
-## Dataframe: weightLogInfo_merged 
-## # A tibble: 5 × 3
-##           Id mean_weight mean_BMI
-##        &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;
-## 1 1503960366        52.6     22.6
-## 2 1927972279       134.      47.5
-## 3 2873212765        57       21.6
-## 4 4319703577        72.4     27.4
-## 5 4558609924        69.6     27.2</code></pre>
-<p>I am planning to merge hourly and minutely data frames to work more
-efficiently, but before that I want to check if each data frame share an
-Id variable.</p>
-<pre class="r"><code>for (df_name in dataframes) {
-  df &lt;- get(df_name) 
-  if (&quot;Id&quot; %in% colnames(df)) {
-    cat(df_name, &quot;Id variable found.\n&quot;)
-  } else {
-    cat(df_name, &quot;has no Id variable.\n&quot;)
-  }
-}</code></pre>
-<pre><code>## dailyActivity_merged Id variable found.
-## heartrate_seconds_merged Id variable found.
-## hourlyCalories_merged Id variable found.
-## hourlyIntensities_merged Id variable found.
-## hourlySteps_merged Id variable found.
-## minuteCaloriesNarrow_merged Id variable found.
-## minuteIntensitiesNarrow_merged Id variable found.
-## minuteMETsNarrow_merged Id variable found.
-## minuteSleep_merged Id variable found.
-## minuteStepsNarrow_merged Id variable found.
-## sleepDay_merged Id variable found.
-## weightLogInfo_merged Id variable found.</code></pre>
-<p>Now I will create a hourly_merged dataframe by joining all the
-hourly* dataframes.</p>
-<pre class="r"><code>names_to_remove &lt;- dataframes[grep(&quot;hourly&quot;, dataframes)]
-lapply(names_to_remove, drop_second_column)</code></pre>
-<pre><code>## [[1]]
-## # A tibble: 22,099 × 5
-##            Id Calories Date        Hour Minute
-##         &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366       81 2016-04-12     0      0
-##  2 1503960366       61 2016-04-12     1      0
-##  3 1503960366       59 2016-04-12     2      0
-##  4 1503960366       47 2016-04-12     3      0
-##  5 1503960366       48 2016-04-12     4      0
-##  6 1503960366       48 2016-04-12     5      0
-##  7 1503960366       48 2016-04-12     6      0
-##  8 1503960366       47 2016-04-12     7      0
-##  9 1503960366       68 2016-04-12     8      0
-## 10 1503960366      141 2016-04-12     9      0
-## # ℹ 22,089 more rows
-## 
-## [[2]]
-## # A tibble: 22,099 × 6
-##            Id TotalIntensity AverageIntensity Date        Hour Minute
-##         &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366             20            0.333 2016-04-12     0      0
-##  2 1503960366              8            0.133 2016-04-12     1      0
-##  3 1503960366              7            0.117 2016-04-12     2      0
-##  4 1503960366              0            0     2016-04-12     3      0
-##  5 1503960366              0            0     2016-04-12     4      0
-##  6 1503960366              0            0     2016-04-12     5      0
-##  7 1503960366              0            0     2016-04-12     6      0
-##  8 1503960366              0            0     2016-04-12     7      0
-##  9 1503960366             13            0.217 2016-04-12     8      0
-## 10 1503960366             30            0.5   2016-04-12     9      0
-## # ℹ 22,089 more rows
-## 
-## [[3]]
-## # A tibble: 22,099 × 5
-##            Id StepTotal Date        Hour Minute
-##         &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366       373 2016-04-12     0      0
-##  2 1503960366       160 2016-04-12     1      0
-##  3 1503960366       151 2016-04-12     2      0
-##  4 1503960366         0 2016-04-12     3      0
-##  5 1503960366         0 2016-04-12     4      0
-##  6 1503960366         0 2016-04-12     5      0
-##  7 1503960366         0 2016-04-12     6      0
-##  8 1503960366         0 2016-04-12     7      0
-##  9 1503960366       250 2016-04-12     8      0
-## 10 1503960366      1864 2016-04-12     9      0
-## # ℹ 22,089 more rows</code></pre>
-<pre class="r"><code>dataframes &lt;- setdiff(dataframes, names_to_remove)
-hourly_merged &lt;- full_join(hourlyCalories_merged, hourlyIntensities_merged)</code></pre>
-<pre><code>## Joining with `by = join_by(Id, Date, Hour, Minute)`</code></pre>
-<pre class="r"><code>hourly_merged &lt;- full_join(hourly_merged, hourlySteps_merged)</code></pre>
-<pre><code>## Joining with `by = join_by(Id, Date, Hour, Minute)`</code></pre>
-<pre class="r"><code>dataframes &lt;- c(dataframes, &quot;hourly_merged&quot;)
-rm(list = grep(&quot;^hourly(?!_)&quot;, ls(), perl = TRUE, value = TRUE), envir = .GlobalEnv)</code></pre>
-<p>I will do the same for minute* dataframes.</p>
-<pre class="r"><code>names_to_remove &lt;- dataframes[grep(&quot;minute&quot;, dataframes)]
-lapply(names_to_remove, drop_second_column)</code></pre>
-<pre><code>## [[1]]
-## # A tibble: 1,325,580 × 5
-##            Id Calories Date        Hour Minute
-##         &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366    0.786 2016-04-12     0      0
-##  2 1503960366    0.786 2016-04-12     0      1
-##  3 1503960366    0.786 2016-04-12     0      2
-##  4 1503960366    0.786 2016-04-12     0      3
-##  5 1503960366    0.786 2016-04-12     0      4
-##  6 1503960366    0.944 2016-04-12     0      5
-##  7 1503960366    0.944 2016-04-12     0      6
-##  8 1503960366    0.944 2016-04-12     0      7
-##  9 1503960366    0.944 2016-04-12     0      8
-## 10 1503960366    0.944 2016-04-12     0      9
-## # ℹ 1,325,570 more rows
-## 
-## [[2]]
-## # A tibble: 1,325,580 × 5
-##            Id Intensity Date        Hour Minute
-##         &lt;dbl&gt;     &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366         0 2016-04-12     0      0
-##  2 1503960366         0 2016-04-12     0      1
-##  3 1503960366         0 2016-04-12     0      2
-##  4 1503960366         0 2016-04-12     0      3
-##  5 1503960366         0 2016-04-12     0      4
-##  6 1503960366         0 2016-04-12     0      5
-##  7 1503960366         0 2016-04-12     0      6
-##  8 1503960366         0 2016-04-12     0      7
-##  9 1503960366         0 2016-04-12     0      8
-## 10 1503960366         0 2016-04-12     0      9
-## # ℹ 1,325,570 more rows
-## 
-## [[3]]
-## # A tibble: 1,325,580 × 5
-##            Id  METs Date        Hour Minute
-##         &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366    10 2016-04-12     0      0
-##  2 1503960366    10 2016-04-12     0      1
-##  3 1503960366    10 2016-04-12     0      2
-##  4 1503960366    10 2016-04-12     0      3
-##  5 1503960366    10 2016-04-12     0      4
-##  6 1503960366    12 2016-04-12     0      5
-##  7 1503960366    12 2016-04-12     0      6
-##  8 1503960366    12 2016-04-12     0      7
-##  9 1503960366    12 2016-04-12     0      8
-## 10 1503960366    12 2016-04-12     0      9
-## # ℹ 1,325,570 more rows
-## 
-## [[4]]
-## # A tibble: 1,325,580 × 5
-##            Id Steps Date        Hour Minute
-##         &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-##  1 1503960366     0 2016-04-12     0      0
-##  2 1503960366     0 2016-04-12     0      1
-##  3 1503960366     0 2016-04-12     0      2
-##  4 1503960366     0 2016-04-12     0      3
-##  5 1503960366     0 2016-04-12     0      4
-##  6 1503960366     0 2016-04-12     0      5
-##  7 1503960366     0 2016-04-12     0      6
-##  8 1503960366     0 2016-04-12     0      7
-##  9 1503960366     0 2016-04-12     0      8
-## 10 1503960366     0 2016-04-12     0      9
-## # ℹ 1,325,570 more rows</code></pre>
-<pre class="r"><code>dataframes &lt;- setdiff(dataframes, names_to_remove)
-minutely_merged &lt;- inner_join(minuteCaloriesNarrow_merged, minuteIntensitiesNarrow_merged)</code></pre>
-<pre><code>## Joining with `by = join_by(Id, Date, Hour, Minute)`</code></pre>
-<pre class="r"><code>minutely_merged &lt;- inner_join(minutely_merged, minuteMETsNarrow_merged)</code></pre>
-<pre><code>## Joining with `by = join_by(Id, Date, Hour, Minute)`</code></pre>
-<pre class="r"><code>minutely_merged &lt;- inner_join(minutely_merged, minuteStepsNarrow_merged)</code></pre>
-<pre><code>## Joining with `by = join_by(Id, Date, Hour, Minute)`</code></pre>
-<pre class="r"><code>dataframes &lt;- c(dataframes, &quot;minutely_merged&quot;)
-rm(list = ls()[grepl(&quot;^minute(?!ly)&quot;, ls(), perl = TRUE)], envir = .GlobalEnv)</code></pre>
-<pre class="r"><code>sapply(hourly_merged, function(x) sum(is.na(x)))</code></pre>
-<pre><code>##               Id         Calories             Date             Hour 
-##                0                0                0                0 
-##           Minute   TotalIntensity AverageIntensity        StepTotal 
-##                0                0                0                0</code></pre>
-<pre class="r"><code>sapply(minutely_merged, function(x) sum(is.na(x)))</code></pre>
-<pre><code>##        Id  Calories      Date      Hour    Minute Intensity      METs     Steps 
-##         0         0         0         0         0         0         0         0</code></pre>
-<p>Then, process your data for analysis using the following Case Study
-Roadmap as a guide:</p>
-<p>Case Study Roadmap - Process</p>
-<p>Guiding questions</p>
-<ul>
-<li>What tools are you choosing and why?</li>
-<li>Have you ensured your data’s integrity?</li>
-<li>What steps have you taken to ensure that your data is clean?</li>
-<li>How can you verify that your data is clean and ready to
-analyze?</li>
-<li>Have you documented your cleaning process so you can review and
-share those results?</li>
-</ul>
-<p>Key tasks</p>
-<ol style="list-style-type: decimal">
-<li>Check the data for errors.</li>
-<li>Choose your tools.</li>
-<li>Transform the data so you can work with it effectively.</li>
-<li>Document the cleaning process.</li>
-</ol>
-<p>Deliverable</p>
-<p>Documentation of any cleaning or manipulation of data</p>
+<div id="removing-unnecessary-columns" class="section level3">
+<h3>Removing Unnecessary Columns</h3>
+<p>After splitting the datetime columns, it was found that the Hour,
+Minute, and Second variables in the sleepDay_merged dataframe all
+contained 0, 0, 0 data. Therefore, these columns were removed to clean
+up the dataframe.</p>
+</div>
 </div>
 <div id="analyze" class="section level2">
 <h2>Analyze</h2>
-<p>Now that your data is stored appropriately and has been prepared for
-analysis, start putting it to work. Use the following Case Study Roadmap
-as a guide:</p>
-<p>Case Study Roadmap - Analyze</p>
-<p>Guiding questions</p>
+<p>I had 5 questions to the data, which were</p>
+<ol style="list-style-type: decimal">
+<li>Are there user groups which can be said to differ in the usage of
+the product?</li>
+<li>In what respect those user groups differ?</li>
+<li>How can this user grouping benefit this analysis, therefore
+profiling the needs of various user groups?</li>
+<li>Are there any patterns in the usage of the product? What are the
+usage habits of user groups?</li>
+<li>Are there any patterns in the data which can be leveraged to
+maximize the benefit for all users?</li>
+</ol>
+<p>The variables I can use to group users can be;<br />
+* Time variables, like the time of the day, or the day of the week, *
+Activity per day * Distance per day * Steps per day * Calories per day *
+Mean Heart Rate * Intensity per day * Sleep duration per day *
+Weight</p>
+<p>Now I’ll do some feature engineering: Create the variables which I
+thought I can use for grouping users. Starting with weekdays, for this I
+will use a .csv which I created to match dates with weekday names.</p>
+<p>From daily_activity dataframe, I created a TotalMinutes variable as
+the sum of the minutes of different types of activities that day. I also
+created per day variables for all variables by grouping the data by the
+user and put that data to a new dataframe named per_day.</p>
+<p>[1] “Id” “steps_per_day” “distance_per_day”<br />
+[4] “minutes_per_day” “Calories_per_day”
+“VeryActiveDistance_per_day”<br />
+[7] “ModeratelyActiveDistance_per_day” “LightActiveDistance_per_day”
+“SedentaryActiveDistance_per_day” [10] “VeryActiveMinutes_per_day”
+“FairlyActiveMinutes_per_day” “LightlyActiveMinutes_per_day”<br />
+[13] “SedentaryMinutes_per_day” “mean_sleep_minutes”
+“mean_time_in_bed_minutes”</p>
+<p>I also want to create a variable indicating the time of day
+i.e. Morning, Afternoon, Evening, and Night.</p>
 <ul>
 <li>How should you organize your data to perform analysis on it?</li>
 <li>Has your data been properly formatted?</li>
