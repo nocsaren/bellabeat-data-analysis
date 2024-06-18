@@ -1,16 +1,12 @@
 --- 
-title: "Untitled" 
-author: "Anonymous" 
+title: "Bellabeat Usage Analysis" 
+author: "B. Can Serdar" 
 output: html_document 
 ---
 
 
 ```{r setup, include=FALSE} 
-knitr::opts_chunk$set(
-	message = FALSE,
-	warning = FALSE,
-	include = FALSE
-)
+
 library(tidyverse)
 library(skimr)
 
@@ -71,15 +67,6 @@ dataframes <- load_csv_files("./data")
 ## Data Overview  
 Using the skim function, a preliminary overview of the data was obtained. The dataset consists of 18 CSV files that can be categorized as follows:
 
-```{r, Skim, eval=FALSE, include=FALSE}
-for (df_name in dataframes) {
-  cat("Dataframe:", df_name, "\n")
-  print(skim(get(df_name)))
-  cat("\n")
-}
-
-```
-
 
 •	Daily Data:  
 o	dailyActivity_merged  
@@ -139,15 +126,17 @@ dataframes <- setdiff(dataframes, names_to_remove)
 rm(list = grep("Wide", ls(), value = TRUE), envir = .GlobalEnv)
 ```
 2. Check for Missing Values:  
-```{r, NA Check, echo=TRUE, message=TRUE, warning=TRUE}
+```{r, NA Check, echo=TRUE, message=TRUE, warning=TRUE, include=FALSE}
 for (df_name in dataframes) {
   cat( df_name, "dataframe", "has", sapply(df_name, function(x) sum(is.na(x))), "NAs.", "\n")
 }
 
 ```
-All data frames were checked for missing values. No missing values were found in any of the data frames.   
+All data frames were checked for missing values. No missing values were found in any of the data frames.
+
+
 3. Remove Duplicates:  
-```{r, Duplicate Check, echo=TRUE, message=TRUE, warning=TRUE}
+```{r, Duplicate Check, echo=TRUE, message=TRUE, warning=TRUE, include=FALSE}
 for (df_name in dataframes) {
   df <- get(df_name)  
   num_duplicates <- sum(duplicated(df)) 
@@ -155,11 +144,11 @@ for (df_name in dataframes) {
 }
 ```
 
-•	minuteSleep_merged had 543 duplicates.
+•	minuteSleep_merged had 543 duplicates.  
 •	sleepDay_merged had 3 duplicates.
 
 Duplicates were removed and the data was rechecked to confirm there were no remaining duplicates.
-```{r, Remove Duplicate, echo=TRUE, message=TRUE, warning=TRUE}
+```{r, Remove Duplicate, echo=TRUE, message=TRUE, warning=TRUE, include=FALSE}
 dataframes_with_duplicates <- c("minuteSleep_merged", "sleepDay_merged")
 minuteSleep_merged <- minuteSleep_merged[!duplicated(minuteSleep_merged), ]
 sleepDay_merged <- sleepDay_merged[!duplicated(sleepDay_merged), ]
@@ -276,7 +265,9 @@ The variables I can use to group users can be;
 * Mean Heart Rate  
 * Intensity per day  
 * Sleep duration per day  
-* Weight  
+* Weight   
+
+
 To address these questions, we will perform feature engineering and create new variables that can be used to group users. These variables include time-related variables, activity levels, distance, steps, calories, heart rate, intensity, sleep duration, and weight.
 To analyze user behavior based on the day of the week, I created a weekdays data frame that maps dates to weekday names. This data frame was then joined with all other data frames containing date information to add the weekday information to each record. I also created a function to group hours of the day into categorical times: Morning, Afternoon, Evening, and Night. This function was applied to all data frames that contain hour data.
 
@@ -308,7 +299,7 @@ rm(updated_df)
 
 From the dailyActivity_merged dataframe, I created a TotalMinutes variable as the sum of the minutes of different types of activities (e.g., SedentaryMinutes, LightlyActiveMinutes, FairlyActiveMinutes, and VeryActiveMinutes). Additionally, I created per-day variables for all metrics by grouping the data by user and date, storing this aggregated data in a new dataframe named per_day.
 
-```{r message=FALSE, warning=FALSE, engineer features, message=FALSE, include=FALSE}
+```{r, engineer features, warning=FALSE,  message=FALSE, include=FALSE}
 
 daily_activity$TotalMinutes <- daily_activity$VeryActiveMinutes + 
   daily_activity$FairlyActiveMinutes + 
@@ -336,8 +327,173 @@ sleep_per_day <- sleepday %>% select(Id, TotalMinutesAsleep, TotalTimeInBed, Dat
 
 per_day <- left_join(per_day, sleep_per_day)
 ```
+Here is how per_day dataframe look like:
 
+```{r, echo=FALSE, per_day, paged.print=TRUE}
+  print(skim(per_day))
+```
             
+```{r, steps_per_day, eval=TRUE, echo=FALSE, warning=FALSE}
+
+var_to_plot <- "steps_per_day"
+# Calculate quartiles and median
+Q1 <- quantile(per_day[[var_to_plot]], 0.25)
+Q2 <- median(per_day[[var_to_plot]])
+Q3 <- quantile(per_day[[var_to_plot]], 0.75)
+
+# Define labels and levels for annotations
+labels <- c("-3 IQR", "-2 IQR", "-1 IQR", "median", "+1 IQR", "+2 IQR", "+3 IQR")
+levels <- c(max(0, Q1 - 3 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - 2 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - IQR(per_day[[var_to_plot]])),
+            Q2,  # median
+            Q3 + IQR(per_day[[var_to_plot]]), 
+            Q3 + 2 * IQR(per_day[[var_to_plot]]), 
+            Q3 + 3 * IQR(per_day[[var_to_plot]]))
+
+ggplot(per_day, aes_string(x = var_to_plot)) +
+  geom_density(adjust = 0.5) +
+  labs(title = paste0("Density Plot of ", var_to_plot), x = var_to_plot, y = "Density") +
+  geom_vline(xintercept = levels, linetype = "dashed", color = "blue") +
+  annotate(geom = "text", x = levels, y = max(density(per_day[[var_to_plot]])$y), label = labels, hjust = 0.5, vjust = -5) +
+  annotate(geom = "text", x = levels, y = 0, label = round(levels, digits = 2), vjust = 1, hjust = 0.5, color = "blue", size = 3)
+
+```
+
+```{r, distance_per_day, eval=TRUE, echo=FALSE, warning=FALSE}
+
+var_to_plot <- "distance_per_day"
+# Calculate quartiles and median
+Q1 <- quantile(per_day[[var_to_plot]], 0.25)
+Q2 <- median(per_day[[var_to_plot]])
+Q3 <- quantile(per_day[[var_to_plot]], 0.75)
+
+# Define labels and levels for annotations
+labels <- c("-3 IQR", "-2 IQR", "-1 IQR", "median", "+1 IQR", "+2 IQR", "+3 IQR")
+levels <- c(max(0, Q1 - 3 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - 2 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - IQR(per_day[[var_to_plot]])),
+            Q2,  # median
+            Q3 + IQR(per_day[[var_to_plot]]), 
+            Q3 + 2 * IQR(per_day[[var_to_plot]]), 
+            Q3 + 3 * IQR(per_day[[var_to_plot]]))
+
+ggplot(per_day, aes_string(x = var_to_plot)) +
+  geom_density(adjust = 0.5) +
+  labs(title = paste0("Density Plot of ", var_to_plot), x = var_to_plot, y = "Density") +
+  geom_vline(xintercept = levels, linetype = "dashed", color = "blue") +
+  annotate(geom = "text", x = levels, y = max(density(per_day[[var_to_plot]])$y), label = labels, hjust = 0.5, vjust = -5) +
+  annotate(geom = "text", x = levels, y = 0, label = round(levels, digits = 2), vjust = 1, hjust = 0.5, color = "blue", size = 3)
+
+```
+
+```{r, minutes_per_day, eval=TRUE, echo=FALSE, warning=FALSE}
+
+var_to_plot <- "minutes_per_day"
+# Calculate quartiles and median
+Q1 <- quantile(per_day[[var_to_plot]], 0.25)
+Q2 <- median(per_day[[var_to_plot]])
+Q3 <- quantile(per_day[[var_to_plot]], 0.75)
+
+# Define labels and levels for annotations
+labels <- c("-3 IQR", "-2 IQR", "-1 IQR", "median", "+1 IQR", "+2 IQR", "+3 IQR")
+levels <- c(max(0, Q1 - 3 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - 2 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - IQR(per_day[[var_to_plot]])),
+            Q2,  # median
+            Q3 + IQR(per_day[[var_to_plot]]), 
+            Q3 + 2 * IQR(per_day[[var_to_plot]]), 
+            Q3 + 3 * IQR(per_day[[var_to_plot]]))
+
+ggplot(per_day, aes_string(x = var_to_plot)) +
+  geom_density(adjust = 0.5) +
+  labs(title = paste0("Density Plot of ", var_to_plot), x = var_to_plot, y = "Density") +
+  geom_vline(xintercept = levels, linetype = "dashed", color = "blue") +
+  annotate(geom = "text", x = levels, y = max(density(per_day[[var_to_plot]])$y), label = labels, hjust = 0.5, vjust = -5) +
+  annotate(geom = "text", x = levels, y = 0, label = round(levels, digits = 2), vjust = 1, hjust = 0.5, color = "blue", size = 3)
+
+```
+
+```{r, Calories_per_day, eval=TRUE, echo=FALSE, warning=FALSE}
+
+var_to_plot <- "Calories_per_day"
+# Calculate quartiles and median
+Q1 <- quantile(per_day[[var_to_plot]], 0.25)
+Q2 <- median(per_day[[var_to_plot]])
+Q3 <- quantile(per_day[[var_to_plot]], 0.75)
+
+# Define labels and levels for annotations
+labels <- c("-3 IQR", "-2 IQR", "-1 IQR", "median", "+1 IQR", "+2 IQR", "+3 IQR")
+levels <- c(max(0, Q1 - 3 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - 2 * IQR(per_day[[var_to_plot]])), 
+            max(0, Q1 - IQR(per_day[[var_to_plot]])),
+            Q2,  # median
+            Q3 + IQR(per_day[[var_to_plot]]), 
+            Q3 + 2 * IQR(per_day[[var_to_plot]]), 
+            Q3 + 3 * IQR(per_day[[var_to_plot]]))
+
+ggplot(per_day, aes_string(x = var_to_plot)) +
+  geom_density(adjust = 0.5) +
+  labs(title = paste0("Density Plot of ", var_to_plot), x = var_to_plot, y = "Density") +
+  geom_vline(xintercept = levels, linetype = "dashed", color = "blue") +
+  annotate(geom = "text", x = levels, y = max(density(per_day[[var_to_plot]])$y), label = labels, hjust = 0.5, vjust = -5) +
+  annotate(geom = "text", x = levels, y = 0, label = round(levels, digits = 2), vjust = 1, hjust = 0.5, color = "blue", size = 3)
+
+```
+
+```{r, mean_sleep_minutes, eval=TRUE, echo=FALSE, warning=FALSE}
+
+var_to_plot <- "mean_sleep_minutes"
+# Calculate quartiles and median
+Q1 <- quantile(sleep_per_day[[var_to_plot]], 0.25)
+Q2 <- median(sleep_per_day[[var_to_plot]])
+Q3 <- quantile(sleep_per_day[[var_to_plot]], 0.75)
+
+# Define labels and levels for annotations
+labels <- c("-3 IQR", "-2 IQR", "-1 IQR", "median", "+1 IQR", "+2 IQR", "+3 IQR")
+levels <- c(max(0, Q1 - 3 * IQR(sleep_per_day[[var_to_plot]])), 
+            max(0, Q1 - 2 * IQR(sleep_per_day[[var_to_plot]])), 
+            max(0, Q1 - IQR(sleep_per_day[[var_to_plot]])),
+            Q2,  # median
+            Q3 + IQR(sleep_per_day[[var_to_plot]]), 
+            Q3 + 2 * IQR(sleep_per_day[[var_to_plot]]), 
+            Q3 + 3 * IQR(sleep_per_day[[var_to_plot]]))
+
+ggplot(sleep_per_day, aes_string(x = var_to_plot)) +
+  geom_density(adjust = 0.5) +
+  labs(title = paste0("Density Plot of ", var_to_plot), x = var_to_plot, y = "Density") +
+  geom_vline(xintercept = levels, linetype = "dashed", color = "blue") +
+  annotate(geom = "text", x = levels, y = max(density(sleep_per_day[[var_to_plot]])$y), label = labels, hjust = 0.5, vjust = -5) +
+  annotate(geom = "text", x = levels, y = 0, label = round(levels, digits = 2), vjust = 1, hjust = 0.5, color = "blue", size = 3)
+
+```
+
+```{r, mean_time_in_bed_minutes, eval=TRUE, echo=FALSE, warning=FALSE}
+
+var_to_plot <- "mean_time_in_bed_minutes"
+# Calculate quartiles and median
+Q1 <- quantile(sleep_per_day[[var_to_plot]], 0.25)
+Q2 <- median(sleep_per_day[[var_to_plot]])
+Q3 <- quantile(sleep_per_day[[var_to_plot]], 0.75)
+
+# Define labels and levels for annotations
+labels <- c("-3 IQR", "-2 IQR", "-1 IQR", "median", "+1 IQR", "+2 IQR", "+3 IQR")
+levels <- c(max(0, Q1 - 3 * IQR(sleep_per_day[[var_to_plot]])), 
+            max(0, Q1 - 2 * IQR(sleep_per_day[[var_to_plot]])), 
+            max(0, Q1 - IQR(sleep_per_day[[var_to_plot]])),
+            Q2,  # median
+            Q3 + IQR(sleep_per_day[[var_to_plot]]), 
+            Q3 + 2 * IQR(sleep_per_day[[var_to_plot]]), 
+            Q3 + 3 * IQR(sleep_per_day[[var_to_plot]]))
+
+ggplot(sleep_per_day, aes_string(x = var_to_plot)) +
+  geom_density(adjust = 0.5) +
+  labs(title = paste0("Density Plot of ", var_to_plot), x = var_to_plot, y = "Density") +
+  geom_vline(xintercept = levels, linetype = "dashed", color = "blue") +
+  annotate(geom = "text", x = levels, y = max(density(sleep_per_day[[var_to_plot]])$y), label = labels, hjust = 0.5, vjust = -5) +
+  annotate(geom = "text", x = levels, y = 0, label = round(levels, digits = 2), vjust = 1, hjust = 0.5, color = "blue", size = 3)
+```
+
 
 ## Share
 

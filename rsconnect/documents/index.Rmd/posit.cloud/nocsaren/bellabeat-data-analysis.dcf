@@ -1,0 +1,12 @@
+name: bellabeat-data-analysis
+title: bellabeat-data-analysis
+username: nocsaren
+account: nocsaren
+server: posit.cloud
+hostUrl: https://api.posit.cloud/v1
+appId: 8345419
+bundleId: 8753451
+url: https://posit.cloud/content/8345419
+version: 1
+asMultiple: FALSE
+asStatic: TRUE
